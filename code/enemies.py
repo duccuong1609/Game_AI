@@ -2,6 +2,7 @@ import pygame
 from settings import *
 from support import import_folder
 from support import choose_enemy
+from debug import *
 
 class Enemy(pygame.sprite.Sprite):
 	def __init__(self,pos,groups,obstacle_sprites,num):

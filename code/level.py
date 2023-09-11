@@ -12,25 +12,29 @@ class Level:
 
 		# get the display surface 
 		self.display_surface = pygame.display.get_surface()
-
+		self.layouts = None
 		# sprite group setup
 		self.visible_sprites = YSortCameraGroup()
 		self.obstacle_sprites = pygame.sprite.Group()
-
+		self.point = 0
 		# sprite setup
 		self.create_map()
 
 	def create_map(self):
+		
+		self.player = Player((2112,3584),[self.visible_sprites],self.obstacle_sprites)
+		self.enemy = Enemy((2112-64,3584),[self.visible_sprites],self.obstacle_sprites,0)
+
 		layouts = {
 			'boundary': import_csv_layout('map/map_FloorBlocks.csv'),
-			'grass': import_csv_layout('map/map_Grass.csv'),
+			'item': import_csv_layout('map/map_Grass.csv'),
 			'object': import_csv_layout('map/map_Objects.csv'),
 		}
 		graphics = {
-			'grass': import_folder('graphics/Grass'),
+			'item': import_folder('graphics/Grass'),
 			'objects': import_folder('graphics/objects')
 		}
-
+  
 		for style,layout in layouts.items():
 			for row_index,row in enumerate(layout):
 				for col_index, col in enumerate(row):
@@ -39,23 +43,33 @@ class Level:
 						y = row_index * TILESIZE
 						if style == 'boundary':
 							Tile((x,y),[self.obstacle_sprites],'invisible')
-						if style == 'grass':
-							random_grass_image = choice(graphics['grass'])
-							Tile((x,y),[self.visible_sprites,self.obstacle_sprites],'grass',random_grass_image)
-
+						if style == 'item':
+							surf = graphics['item'][int(col)]
+							Tile((x,y),[self.visible_sprites],'item',surf)
 						if style == 'object':
 							surf = graphics['objects'][int(col)]
 							Tile((x,y),[self.visible_sprites],'object',surf)
 
-		self.player = Player((2112,3584),[self.visible_sprites],self.obstacle_sprites)
-		self.enemy = Enemy((2112-64,3584),[self.visible_sprites],self.obstacle_sprites,0)
-	
+	def check_took_kunai(self):
+		if self.layouts is None :
+			self.layouts = import_csv_layout('map/map_Grass.csv')
+		for row_index,row in enumerate(self.layouts):
+			for col_index, col in enumerate(row):
+				x = col_index * TILESIZE
+				y = row_index * TILESIZE
+				if(x <= self.player.hitbox.x <= (x+64) and y <= self.player.hitbox.y <= (y+64)) :
+					if self.layouts[row_index][col_index] != '-1':
+						self.layouts[row_index][col_index] = '-1'
+						Tile((x,y),[self.visible_sprites],'invisible')
+ 
 	def run(self):
 		# update and draw the game
 		self.visible_sprites.custom_draw(self.player)
 		self.visible_sprites.update()
 		#check player status
 		# debug(self.player.status)
+		self.check_took_kunai()
+	
 
 
 class YSortCameraGroup(pygame.sprite.Group):
