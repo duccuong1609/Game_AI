@@ -5,9 +5,11 @@ from player import Player
 from enemies import Enemy
 from debug import debug
 from support import *
-from random import choice
+from enemies import find_shortest_path, maze
 
 class Level:
+	x = 1664
+	y = 3072 - 64 + 13
 	def __init__(self):
 
 		# get the display surface 
@@ -55,8 +57,8 @@ class Level:
 							surf = graphics['objects'][int(col)]
 							Tile((x,y),[self.visible_sprites],'object',surf)
        
-		self.player = Player((2112,3584+64),[self.visible_sprites],self.obstacle_sprites)
-		self.enemy = Enemy((2112-64,3584+64),[self.visible_sprites],self.obstacle_sprites,0)
+		self.player = Player((1664,3072-64),[self.visible_sprites],self.obstacle_sprites)
+		self.enemy = Enemy((2112,3530),[self.visible_sprites],self.obstacle_sprites,1)
 
 	#finding the sprites index on group sprites (YSortCameraGroup)
 	def find_sprites_index(self,x,y):
@@ -75,9 +77,12 @@ class Level:
 					self.count_time_speed_restore = 0
 					self.player.speed += 1
 			if(self.player.speed > PLAYERSPEED) :
+				
 				if self.count_time_speed_restore == 100 :
 					self.count_time_speed_restore = 0
 					self.player.speed -= 10
+				if(self.player.speed <PLAYERSPEED) :
+					self.player.speed += (PLAYERSPEED -self.player.speed)
 	#checking and remove kunai from group sprites
 	def check_took_kunai(self):
 		if self.layouts is None :
@@ -92,7 +97,7 @@ class Level:
 							# increase point for character
 							self.point += 1000
 						if(self.layouts[row_index][col_index]) == '1' :
-							if(self.player.speed)>1:
+							if(self.player.speed)>5:
 								self.player.speed -= 1
 								self.count_time_speed_restore = 0
 						if(self.layouts[row_index][col_index]) == '2' :
@@ -112,6 +117,8 @@ class Level:
     
 	def run(self):
 		# update and draw the game
+		# if (int (self.enemy.hitbox.x / 64), int (self.enemy.hitbox.y / 64)) != (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)):
+		find_shortest_path((int (self.enemy.hitbox.x / 64), int (self.enemy.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)))	
 		self.visible_sprites.custom_draw(self.player)
 		self.visible_sprites.update()
 		#check player status
@@ -120,7 +127,8 @@ class Level:
 		self.restore_speed()
 		if self.point >0 :
 			self.point -=1
-		debug(self.point)
+		# debug(self.point)
+		# debug(self.player.speed)
 
 class YSortCameraGroup(pygame.sprite.Group):
 	def __init__(self):

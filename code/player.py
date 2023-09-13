@@ -13,7 +13,7 @@ class Player(pygame.sprite.Sprite):
 		self.import_player_assets()
 		self.status = 'down'
 		self.frame_index = 0
-		self.animation_speed = 0.3
+		self.animation_speed = 0.15
 
 		# movement 
 		self.direction = pygame.math.Vector2()
@@ -141,3 +141,8 @@ class Player(pygame.sprite.Sprite):
 		self.get_status()
 		self.animate()
 		self.move(self.speed)
+
+	def changePos(self, x, y):
+		self.direction.x = x
+		self.direction.y = y
+		self.update()

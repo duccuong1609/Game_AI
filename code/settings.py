@@ -1,7 +1,7 @@
 # game setup
 # class define constants
 WIDTH    = 1280	
-HEIGTH   = 720
-FPS      = 120
+HEIGHT  = 720
+FPS      = 160
 TILESIZE = 64
-PLAYERSPEED = 10
+PLAYERSPEED = 8
