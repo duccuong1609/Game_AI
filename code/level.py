@@ -6,8 +6,11 @@ from enemies import Enemy
 from debug import debug
 from support import *
 from random import choice
+from enemies import find_shortest_path, maze, paths_dir
 
 class Level:
+	x = 1664
+	y = 3072 - 64 + 13
 	def __init__(self):
 
 		# get the display surface 
@@ -47,11 +50,12 @@ class Level:
 							surf = graphics['objects'][int(col)]
 							Tile((x,y),[self.visible_sprites],'object',surf)
 
-		self.player = Player((2112,3584),[self.visible_sprites],self.obstacle_sprites)
-		self.enemy = Enemy((2112-64,3584),[self.visible_sprites],self.obstacle_sprites,0)
-	
+		self.player = Player((1664,3072-64),[self.visible_sprites],self.obstacle_sprites)
+		self.enemy = Enemy((2112,3530),[self.visible_sprites],self.obstacle_sprites,0)
+
 	def run(self):
 		# update and draw the game
+		find_shortest_path( (int (self.enemy.hitbox.x / 64), int (self.enemy.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)),maze)	
 		self.visible_sprites.custom_draw(self.player)
 		self.visible_sprites.update()
 		#check player status
@@ -108,4 +112,3 @@ class YSortCameraGroup(pygame.sprite.Group):
 		self.display_surface.blit(scaled_surf,scaled_rect)
 		if(scaled_surf.get_height() >= 100 and scaled_surf.get_width()>= 100 ):
 			self.zoom_keyboard_control()
-
