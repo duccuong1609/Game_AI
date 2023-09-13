@@ -14,10 +14,10 @@ class Enemy(pygame.sprite.Sprite):
 		self.import_Enemy_assets(num)
 		self.status = 'down'
 		self.frame_index = 0
-		self.animation_speed = 0.15
+		self.animation_speed = 0.3
 		# movement 
 		self.direction = pygame.math.Vector2()
-		self.speed = 9
+		self.speed = 10
 		self.obstacle_sprites = obstacle_sprites
 
 	def import_Enemy_assets(self,num):

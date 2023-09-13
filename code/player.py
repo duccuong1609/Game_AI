@@ -13,11 +13,11 @@ class Player(pygame.sprite.Sprite):
 		self.import_player_assets()
 		self.status = 'down'
 		self.frame_index = 0
-		self.animation_speed = 0.15
+		self.animation_speed = 0.3
 
 		# movement 
 		self.direction = pygame.math.Vector2()
-		self.speed = 30
+		self.speed = PLAYERSPEED
 		# self.attacking = False
 		# self.attack_cooldown = 400
 		# self.attack_time = None

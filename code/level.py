@@ -16,14 +16,17 @@ class Level:
 		# sprite group setup
 		self.visible_sprites = YSortCameraGroup()
 		self.obstacle_sprites = pygame.sprite.Group()
+		#item
 		self.point = 0
+		self.sprites_index = 0
+		self.sprites_object_list = []
+		self.count_time_speed_restore = 0
 		# sprite setup
 		self.create_map()
 
 	def create_map(self):
 		
-		self.player = Player((2112,3584),[self.visible_sprites],self.obstacle_sprites)
-		self.enemy = Enemy((2112-64,3584),[self.visible_sprites],self.obstacle_sprites,0)
+		
 
 		layouts = {
 			'boundary': import_csv_layout('map/map_FloorBlocks.csv'),
@@ -46,10 +49,36 @@ class Level:
 						if style == 'item':
 							surf = graphics['item'][int(col)]
 							Tile((x,y),[self.visible_sprites],'item',surf)
+							self.sprites_object_list.append(MyObject(x,y,self.sprites_index))
+							self.sprites_index+=1
 						if style == 'object':
 							surf = graphics['objects'][int(col)]
 							Tile((x,y),[self.visible_sprites],'object',surf)
+       
+		self.player = Player((2112,3584+64),[self.visible_sprites],self.obstacle_sprites)
+		self.enemy = Enemy((2112-64,3584+64),[self.visible_sprites],self.obstacle_sprites,0)
 
+	#finding the sprites index on group sprites (YSortCameraGroup)
+	def find_sprites_index(self,x,y):
+			for i in range(0,len(self.sprites_object_list)):
+				if(self.sprites_object_list[i].x == x and self.sprites_object_list[i].y == y) :
+					return self.sprites_object_list[i].id
+			return -1
+	#restore player_speed
+	def restore_speed(self):
+		if(self.point >0) :
+			self.point -= 1
+		if(self.player.speed != PLAYERSPEED) :
+			self.count_time_speed_restore += 1
+			if(self.player.speed < PLAYERSPEED) :
+				if self.count_time_speed_restore == 100 :
+					self.count_time_speed_restore = 0
+					self.player.speed += 1
+			if(self.player.speed > PLAYERSPEED) :
+				if self.count_time_speed_restore == 100 :
+					self.count_time_speed_restore = 0
+					self.player.speed -= 10
+	#checking and remove kunai from group sprites
 	def check_took_kunai(self):
 		if self.layouts is None :
 			self.layouts = import_csv_layout('map/map_Grass.csv')
@@ -57,11 +86,30 @@ class Level:
 			for col_index, col in enumerate(row):
 				x = col_index * TILESIZE
 				y = row_index * TILESIZE
-				if(x <= self.player.hitbox.x <= (x+64) and y <= self.player.hitbox.y <= (y+64)) :
+				if((x-64) <= self.player.hitbox.x <= (x+64) and (y-64) <= self.player.hitbox.y <= (y+64)) :
 					if self.layouts[row_index][col_index] != '-1':
+						if(self.layouts[row_index][col_index]) == '0' :
+							# increase point for character
+							self.point += 1000
+						if(self.layouts[row_index][col_index]) == '1' :
+							if(self.player.speed)>1:
+								self.player.speed -= 1
+								self.count_time_speed_restore = 0
+						if(self.layouts[row_index][col_index]) == '2' :
+							if(self.player.speed) <20:
+								self.player.speed += 10
+								self.count_time_speed_restore = 0
 						self.layouts[row_index][col_index] = '-1'
-						Tile((x,y),[self.visible_sprites],'invisible')
- 
+						id = self.find_sprites_index(x,y)
+						if(id > -1):
+							length = len(self.visible_sprites)
+							self.visible_sprites.remove(self.visible_sprites.sprites()[self.find_sprites_index(x,y)])
+							if(len(self.visible_sprites) < length) :
+								if((id) > -1) :
+									self.sprites_object_list.remove(self.sprites_object_list[id])
+									for i in range((id),len(self.sprites_object_list)):
+										self.sprites_object_list[i].id -= 1
+    
 	def run(self):
 		# update and draw the game
 		self.visible_sprites.custom_draw(self.player)
@@ -69,8 +117,10 @@ class Level:
 		#check player status
 		# debug(self.player.status)
 		self.check_took_kunai()
-	
-
+		self.restore_speed()
+		if self.point >0 :
+			self.point -=1
+		debug(self.point)
 
 class YSortCameraGroup(pygame.sprite.Group):
 	def __init__(self):
@@ -122,4 +172,9 @@ class YSortCameraGroup(pygame.sprite.Group):
 		self.display_surface.blit(scaled_surf,scaled_rect)
 		if(scaled_surf.get_height() >= 100 and scaled_surf.get_width()>= 100 ):
 			self.zoom_keyboard_control()
-
+   
+class MyObject:
+    def __init__(self, x, y, id):
+        self.x = x
+        self.y = y
+        self.id = id
