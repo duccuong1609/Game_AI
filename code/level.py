@@ -170,9 +170,10 @@ class YSortCameraGroup(pygame.sprite.Group):
 		scaled_surf = pygame.transform.scale(self.internal_surf,self.internal_surface_size_vector*self.zoom_scale)
 		scaled_rect = scaled_surf.get_rect(center = (self.half_width,self.half_height))
 		self.display_surface.blit(scaled_surf,scaled_rect)
-		if(scaled_surf.get_height() >= 100 and scaled_surf.get_width()>= 100 ):
-			self.zoom_keyboard_control()
-   
+		self.zoom_keyboard_control()
+		if(scaled_surf.get_width() <= 100  or scaled_surf.get_height() <=100):
+			self.zoom_scale += 0.01
+
 class MyObject:
     def __init__(self, x, y, id):
         self.x = x
