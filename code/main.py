@@ -11,8 +11,9 @@ class Game:
 		self.screen = pygame.display.set_mode((WIDTH,HEIGHT))	
 		pygame.display.set_caption('Naruto')
 		self.clock = pygame.time.Clock()
-		main_sound = pygame.mixer.Sound('audio/main.wav')
+		# main_sound = pygame.mixer.Sound('audio/main.wav')
 		# main_sound.play(loops=-1)
+		# main_sound.set_volume(0.1)
 		self.level = Level()
 	
 	def run(self):

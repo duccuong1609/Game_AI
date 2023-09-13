@@ -17,7 +17,7 @@ class Player(pygame.sprite.Sprite):
 
 		# movement 
 		self.direction = pygame.math.Vector2()
-		self.speed = 8
+		self.speed = PLAYERSPEED
 		# self.attacking = False
 		# self.attack_cooldown = 400
 		# self.attack_time = None
