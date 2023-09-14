@@ -27,8 +27,6 @@ class Level:
 		self.create_map()
 
 	def create_map(self):
-		
-		
 
 		layouts = {
 			'boundary': import_csv_layout('map/map_FloorBlocks.csv'),
@@ -59,6 +57,7 @@ class Level:
        
 		self.player = Player((1664,3072-64),[self.visible_sprites],self.obstacle_sprites)
 		self.enemy = Enemy((2112,3530),[self.visible_sprites],self.obstacle_sprites,1)
+		self.enemy_2 = Enemy((2112 - 64,3530),[self.visible_sprites],self.obstacle_sprites,0)
 
 	#finding the sprites index on group sprites (YSortCameraGroup)
 	def find_sprites_index(self,x,y):
@@ -83,6 +82,17 @@ class Level:
 					self.player.speed -= 10
 				if(self.player.speed <PLAYERSPEED) :
 					self.player.speed += (PLAYERSPEED -self.player.speed)
+	#draw the hitbox
+	def draw_hitbox(self, screen):
+		hitbox_surface = pygame.Surface((self.width, self.height))
+		hitbox_surface.set_alpha(128)
+		pygame.draw.rect(hitbox_surface, (255, 0, 0), hitbox_surface.get_rect(), 1)
+
+		center = (self.width // 2, self.height // 2)
+		radius = self.width // 2
+		pygame.draw.circle(hitbox_surface, (255, 0, 0), center, radius, 1)
+
+		screen.blit(hitbox_surface, (self.x, self.y))
 	#checking and remove kunai from group sprites
 	def check_took_kunai(self):
 		if self.layouts is None :
@@ -119,6 +129,7 @@ class Level:
 		# update and draw the game
 		# if (int (self.enemy.hitbox.x / 64), int (self.enemy.hitbox.y / 64)) != (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)):
 		find_shortest_path((int (self.enemy.hitbox.x / 64), int (self.enemy.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)))	
+		find_shortest_path((int (self.enemy_2.hitbox.x / 64), int (self.enemy_2.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)))
 		self.visible_sprites.custom_draw(self.player)
 		self.visible_sprites.update()
 		#check player status
@@ -128,7 +139,7 @@ class Level:
 		if self.point >0 :
 			self.point -=1
 		# debug(self.point)
-		# debug(self.player.speed)
+		debug(int (self.player.hitbox.y))
 
 class YSortCameraGroup(pygame.sprite.Group):
 	def __init__(self):

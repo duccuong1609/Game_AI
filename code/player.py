@@ -7,7 +7,7 @@ class Player(pygame.sprite.Sprite):
 		super().__init__(groups)
 		self.image = pygame.image.load('graphics/test/player.png').convert_alpha()
 		self.rect = self.image.get_rect(topleft = pos)
-		self.hitbox = self.rect.inflate(0,-26)
+		self.hitbox = self.rect.inflate(0, 0)	
 
 		# graphics setup
 		self.import_player_assets()
@@ -23,6 +23,7 @@ class Player(pygame.sprite.Sprite):
 		# self.attack_time = None
 
 		self.obstacle_sprites = obstacle_sprites
+
 
 	def import_player_assets(self):
 		character_path = 'graphics/enemy/obito/'
@@ -113,9 +114,10 @@ class Player(pygame.sprite.Sprite):
 				if sprite.hitbox.colliderect(self.hitbox):
 					if self.direction.y > 0: # moving down
 						self.hitbox.bottom = sprite.hitbox.top
+						self.hitbox.y -= 5
 					if self.direction.y < 0: # moving up
 						self.hitbox.top = sprite.hitbox.bottom
-
+						self.hitbox.y += 5
 	# def cooldowns(self):
 	# 	current_time = pygame.time.get_ticks()
 
