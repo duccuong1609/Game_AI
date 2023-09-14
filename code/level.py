@@ -57,7 +57,7 @@ class Level:
        
 		self.player = Player((1664,3072-64),[self.visible_sprites],self.obstacle_sprites)
 		self.enemy = Enemy((2112,3530),[self.visible_sprites],self.obstacle_sprites,1)
-		self.enemy_2 = Enemy((2112 - 64,3530),[self.visible_sprites],self.obstacle_sprites,0)
+		# self.enemy_2 = Enemy((2112 - 64,3530),[self.visible_sprites],self.obstacle_sprites,0)
 
 	#finding the sprites index on group sprites (YSortCameraGroup)
 	def find_sprites_index(self,x,y):
@@ -129,7 +129,7 @@ class Level:
 		# update and draw the game
 		# if (int (self.enemy.hitbox.x / 64), int (self.enemy.hitbox.y / 64)) != (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)):
 		find_shortest_path((int (self.enemy.hitbox.x / 64), int (self.enemy.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)))	
-		find_shortest_path((int (self.enemy_2.hitbox.x / 64), int (self.enemy_2.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)))
+		# find_shortest_path((int (self.enemy_2.hitbox.x / 64), int (self.enemy_2.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)))
 		self.visible_sprites.custom_draw(self.player)
 		self.visible_sprites.update()
 		#check player status
