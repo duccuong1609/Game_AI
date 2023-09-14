@@ -35,7 +35,8 @@ class Enemy(pygame.sprite.Sprite):
 			self.animations[animation] = import_folder(full_path)
 
 	def input(self):
-			self.count = self.count + 1
+		self.count = self.count + 1
+		if paths_dir:
 			if paths_dir[0]:
 				path = paths_dir[0][0]
 				x = path[0]
@@ -58,11 +59,14 @@ class Enemy(pygame.sprite.Sprite):
 				else:
 					self.direction.y = 0
 				self.move(self.speed)
-				if self.count == self.speed:
-					paths_dir[0].pop(0)
+				if self.count == int (64 / self.speed):
+					if point:
+						point[0] = paths_dir[0][0]
+					paths_dir[0].pop(0)	
 					self.count = 0
-					if not paths_dir[0]:
-						paths_dir.clear()
+			else:
+				paths_dir.clear()
+				visited.clear()
 
 	def get_status(self):
 		if self.direction.x == 0 and self.direction.y == 0:
@@ -96,6 +100,7 @@ class Enemy(pygame.sprite.Sprite):
 					if self.direction.y < 0: # moving up
 						self.hitbox.top = sprite.hitbox.bottom
 
+
 	def animate(self):
 		animation = self.animations[self.status]
 		self.frame_index += self.animation_speed
@@ -126,10 +131,11 @@ point = [(0, 0)]
 
 # tìm đường đi ngắn nhất với truy suất (điểm bắt đầu, điểm kết thúc, ma trận)
 def find_shortest_path(start, end):
-	# if start == end:
-	# 	point.clear()
-	# 	point.append((0, 0))
-		bfs(start, end)
+	if start == end:
+		point.clear()
+		point.append((0, 0))
+	bfs(start, end)
+	
 
 #thuật toán bfs
 def bfs(start, end):
@@ -144,7 +150,7 @@ def bfs(start, end):
 	# if len(point) == 0:
 	# 	queue_dir.append([(0, 0)])
 	# else:
-	queue_dir.append([(0, 0)])
+	queue_dir.append(point)
 	# nguoc lai thi phai cho no chay voi diem tiep theo
 
 	while queue:
@@ -158,20 +164,18 @@ def bfs(start, end):
 		if curr == end:
 			paths.append(path)
 			paths_dir.append(path_dir)
-
 		else:
 			# i,j tọa độ x,y của điểm hiện tại
 			i, j = curr[0], curr[1]
 
 			#hướng left,right,top,bottom
-			directions = [(-1, 0), (1, 0), (0, -1), (0, 1)] 
+			directions = [(1, 0), (-1, 0), (0, -1), (0, 1)] 
 			
 			#xét 4 hướng xung quanh
 			for dx, dy in directions:
 				new_i, new_j = i + dx, j + dy
 				# nếu x,y của điểm hiện tại nằm trong map và không thuộc mảng đi qua và nó là điểm có thể đi được
-				# print("maze[new_j][new_i] == '-1': ", maze[new_j][new_i] == '-1')
-				# print("(new_i, new_j) not in visited: ", (new_i, new_j) not in visited)
+				# mac tuong tren nen di khong dc
 				if new_i in range(cols) and new_j in range(rows) and (new_i, new_j) not in visited and maze[new_j][new_i] == '-1':
 					queue_dir.append(path_dir + [(dx, dy)])
 					queue.append(((new_i, new_j), path + [(new_i, new_j)]))
