@@ -129,7 +129,7 @@ def find_shortest_path(start, end):
 	# if start == end:
 	# 	point.clear()
 	# 	point.append((0, 0))
-	bfs(start, end)
+		bfs(start, end)
 
 #thuật toán bfs
 def bfs(start, end):
@@ -156,8 +156,9 @@ def bfs(start, end):
 
 		#kết thúc thuật toán
 		if curr == end:
-			paths_dir.append(path_dir)
 			paths.append(path)
+			paths_dir.append(path_dir)
+
 		else:
 			# i,j tọa độ x,y của điểm hiện tại
 			i, j = curr[0], curr[1]

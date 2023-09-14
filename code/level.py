@@ -117,8 +117,8 @@ class Level:
     
 	def run(self):
 		# update and draw the game
-		# if (int (self.enemy.hitbox.x / 64), int (self.enemy.hitbox.y / 64)) != (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)):
-		find_shortest_path((int (self.enemy.hitbox.x / 64), int (self.enemy.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)))	
+		if (int (self.enemy.hitbox.x / 64), int (self.enemy.hitbox.y / 64)) != (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)):
+			find_shortest_path((int (self.enemy.hitbox.x / 64), int (self.enemy.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)))	
 		self.visible_sprites.custom_draw(self.player)
 		self.visible_sprites.update()
 		#check player status
