@@ -140,7 +140,7 @@ class Level:
 		if self.point >0 :
 			self.point -=1
 		# debug(self.point)
-		debug(self.point)
+		debug(self.player.hitbox.x)
 
 class YSortCameraGroup(pygame.sprite.Group):
 	def __init__(self):
