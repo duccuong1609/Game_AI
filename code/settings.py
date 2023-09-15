@@ -7,4 +7,5 @@ TILESIZE = 64
 PLAYERSPEED = 8
 BFS = 0
 DFS = 1
-DLS = 2
+IDS = 2
+

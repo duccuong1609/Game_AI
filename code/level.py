@@ -137,7 +137,7 @@ class Level:
 	def run(self):
 		#AI find path
 		find_shortest_path(self.enemy,(int (self.enemy.hitbox.x / 64), int (self.enemy.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)), BFS)	
-		find_shortest_path(self.enemy_2,(int (self.enemy_2.hitbox.x / 64), int (self.enemy_2.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)), DFS)		# update and draw the game
+		find_shortest_path(self.enemy_2,(int (self.enemy_2.hitbox.x / 64), int (self.enemy_2.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)), IDS)		# update and draw the game
 		self.visible_sprites.custom_draw(self.player)
 		self.visible_sprites.update()
 		#check player status
@@ -148,7 +148,7 @@ class Level:
 			self.point -=1
 		# debug(self.point)
 		# debug(self.player.hitbox.y)
-		debug(self.enemy.execution_time)
+		debug(self.enemy_2.execution_time)
 class YSortCameraGroup(pygame.sprite.Group):
 	def __init__(self):
 
