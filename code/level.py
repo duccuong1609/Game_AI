@@ -8,8 +8,7 @@ from support import *
 from enemies import find_shortest_path
 
 class Level:
-	x = 1664
-	y = 3072 - 64 + 13
+    
 	def __init__(self):
 
 		# get the display surface 
@@ -25,6 +24,13 @@ class Level:
 		self.count_time_speed_restore = 0
 		# sprite setup
 		self.create_map()
+		#sound effect game
+		self.sound_point = pygame.mixer.Sound('audio/loot_coin.mp3')
+		self.food = pygame.mixer.Sound('audio/food.mp3')
+		self.boom = pygame.mixer.Sound('audio/boom.mp3')
+		self.sound_point.set_volume(0.5)
+		self.food.set_volume(0.5)
+		self.boom.set_volume(0.8)
 
 	def create_map(self):
 
@@ -37,7 +43,7 @@ class Level:
 			'item': import_folder('graphics/Grass'),
 			'objects': import_folder('graphics/objects')
 		}
-  
+
 		for style,layout in layouts.items():
 			for row_index,row in enumerate(layout):
 				for col_index, col in enumerate(row):
@@ -105,14 +111,17 @@ class Level:
 					if self.layouts[row_index][col_index] != '-1':
 						if(self.layouts[row_index][col_index]) == '0' :
 							# increase point for character
+							self.sound_point.play()
 							self.point += 1000
 						if(self.layouts[row_index][col_index]) == '1' :
-							if(self.player.speed)>5:
+							if(self.player.speed)>= PLAYERSPEED//2:
+								self.boom.play()
 								self.player.speed -= 1
 								self.count_time_speed_restore = 0
 						if(self.layouts[row_index][col_index]) == '2' :
-							if(self.player.speed) <14:
-								self.player.speed += 10
+							if(self.player.speed) <= PLAYERSPEED*2:
+								self.food.play()
+								self.player.speed += (int)(PLAYERSPEED*0.3)
 								self.count_time_speed_restore = 0
 						self.layouts[row_index][col_index] = '-1'
 						id = self.find_sprites_index(x,y)
@@ -188,6 +197,7 @@ class YSortCameraGroup(pygame.sprite.Group):
 		scaled_surf = pygame.transform.scale(self.internal_surf,self.internal_surface_size_vector*self.zoom_scale)
 		scaled_rect = scaled_surf.get_rect(center = (self.half_width,self.half_height))
 		self.display_surface.blit(scaled_surf,scaled_rect)
+		
 		self.zoom_keyboard_control()
 		if(scaled_surf.get_width() <= 100  or scaled_surf.get_height() <=100):
 			self.zoom_scale += 0.01
