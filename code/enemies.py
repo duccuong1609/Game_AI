@@ -187,3 +187,50 @@ def dfs(self, start, end):
 				if new_i in range(self.cols) and new_j in range(self.rows) and (new_i, new_j) not in self.visited and self.maze[new_j][new_i] == '-1':
 					stack.append(((new_i, new_j), path + [(dx, dy)]))
 					self.visited.add((new_i, new_j))
+
+# code
+def ids():
+   i = 1
+   while True:
+       limited_dfs(maze, start_node, goal_node, i)
+       if paths_dir:
+           return 
+       i += 1
+
+
+def limited_dfs(maze, start, goal, depth_limit):
+    # visited chứa các đỉnh mà thuật toán đã đi qua
+    visited = set()
+    stack = deque()
+    stack_dir = deque()
+    stack_dir.append([start])
+    stack.append((start, 0))
+    # tạo ngăn xếp với start điểm bắt đầu 0 là lv bắt đầu
+    
+    while stack:
+        node, depth = stack.popleft()
+
+        visited.add(node)
+
+        path_dir = stack_dir.popleft()
+        # stack.pop() lấy đỉnh và lv trong stack
+        if node == goal:
+            paths_dir.append(path_dir)
+
+        else:
+                # i,j tọa độ x,y của điểm hiện tại
+                i, j = node[0], node[1]
+
+                #hướng left,right,top,bottom
+                directions = [(-1, 0), (1, 0), (0, -1), (0, 1)] 
+                for dx, dy in directions:
+                    new_i, new_j = i + dx, j + dy
+                    if depth < depth_limit and new_i in range(rows) and new_j in range(cols) and (new_i, new_j) not in visited and maze[new_i][new_j] == " ":
+                        # không tìm thấy đỉnh thì cho vô visited
+                        visited.add((new_i, new_j))      
+                        #truy suất đỉnh con thuộc node đó trong graph 
+                        # for neighbor in neighbors:
+                        # nếu node đó có con thì thêm vào stack và cho con nó có lv +1
+                        #Nếu node đó không có đỉnh con thì qua đỉnh cùng lv
+                        stack.append(((new_i, new_j), depth + 1))
+                        stack_dir.append(path_dir + [(new_i, new_j)])
