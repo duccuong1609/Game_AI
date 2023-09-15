@@ -24,20 +24,14 @@ class Enemy(pygame.sprite.Sprite):
 		self.direction = pygame.math.Vector2()
 		self.speed = 8
 		self.obstacle_sprites = obstacle_sprites
-		# ma trận (map)
 		self.maze = import_csv_layout('map/map_FloorBlocks.csv')
-		# array chứa vị trí đã đi qua
 		self.visited = set()
-		# số hàng trong ma trận
 		self.rows = len(self.maze)
-		# số cột trong ma trận
 		self.cols = len(self.maze[0])
-		# danh sách các đường đi
 		self.paths = []
-		# tạo mảng để định hướng đường đi
-		self.paths_dir = []
-
 		self.point = [(0, 0)]
+		# self.paths_dir = []
+
 
 	def import_Enemy_assets(self,num):
 		enemy_path = choose_enemy(num)
@@ -50,9 +44,9 @@ class Enemy(pygame.sprite.Sprite):
 
 	def input(self):
 		self.count = self.count + 1
-		if self.paths_dir:
-			if self.paths_dir[0]:
-				path = self.paths_dir[0][0]
+		if self.paths:
+			if self.paths[0]:
+				path = self.paths[0][0]
 				x = path[0]
 				y = path[1]
 				if x == 1:
@@ -72,14 +66,15 @@ class Enemy(pygame.sprite.Sprite):
 					self.status = 'up'
 				else:
 					self.direction.y = 0
+
 				self.move(self.speed)
 				if self.count == int (64 / self.speed):
 					if self.point:
-						self.point[0] = self.paths_dir[0][0]
-					self.paths_dir[0].pop(0)	
+						self.point[0] = self.paths[0][0]
+					self.paths[0].pop(0)	
 					self.count = 0
 			else:
-				self.paths_dir.clear()
+				self.paths.clear()
 				self.visited.clear()
 
 	def get_status(self):
@@ -106,15 +101,13 @@ class Enemy(pygame.sprite.Sprite):
 					if self.direction.x < 0: # moving left
 						self.hitbox.left = sprite.hitbox.right
 
-		if direction == 'vertical':
+		if direction == 'vertical':	
 			for sprite in self.obstacle_sprites:
 				if sprite.hitbox.colliderect(self.hitbox):
 					if self.direction.y > 0: # moving down
 						self.hitbox.bottom = sprite.hitbox.top
-						self.hitbox.y -= 5
 					if self.direction.y < 0: # moving up
 						self.hitbox.top = sprite.hitbox.bottom
-						self.hitbox.y += 5
 
 
 	def animate(self):
@@ -130,56 +123,39 @@ class Enemy(pygame.sprite.Sprite):
 		self.get_status()
 		self.animate()
 
-# tìm đường đi ngắn nhất với truy suất (điểm bắt đầu, điểm kết thúc, ma trận)
 def find_shortest_path(self,start, end):
 	if start == end:
+		# print("You lose")
 		self.point.clear()
+		self.paths.clear()
+		self.visited.clear()
 		self.point.append((0, 0))
 	bfs(self,start, end)
 	
 
-#thuật toán bfs
 def bfs(self,start, end):
 	queue = deque()
-	# Khởi một hàng đợi để chứa các hướng đi
-	queue_dir = deque()
-	# thêm vào hàng đợi (điểm, mảng đường đi)
-	queue.append((start, [start]))
-	# thêm trạng thái đứng yên cho player
-	# chi lan dau tien dung lai thoi hoac la khi ket thuc thuat toan tim kiem
-	# print("point", point)
-	# if len(point) == 0:
-	# 	queue_dir.append([(0, 0)])
-	# else:
-	queue_dir.append(self.point)
-	# nguoc lai thi phai cho no chay voi diem tiep theo
+	queue.append((start, self.point))
+	# queue_dir = deque()
+	# queue_dir.append(self.point)
 
 	while queue:
-		#gắn điểm hiện tại, đường đi bằng phần tử đầu tiên của hàng đợi
 		curr, path = queue.popleft()
-		path_dir = queue_dir.popleft()
-		#thêm điểm hiện tại vào mảng đã đi qua
+		# path_dir = queue_dir.popleft()
 		self.visited.add(curr)
 
-		#kết thúc thuật toán
 		if curr == end:
 			self.paths.append(path)
-			self.paths_dir.append(path_dir)
+			# self.paths_dir.append(path)
 		else:
-			# i,j tọa độ x,y của điểm hiện tại
 			i, j = curr[0], curr[1]
-
-			#hướng left,right,top,bottom
 			directions = [(1, 0), (-1, 0), (0, -1), (0, 1)] 
 			
-			#xét 4 hướng xung quanh
 			for dx, dy in directions:
 				new_i, new_j = i + dx, j + dy
-				# nếu x,y của điểm hiện tại nằm trong map và không thuộc mảng đi qua và nó là điểm có thể đi được
-				# mac tuong tren nen di khong dc
 				if new_i in range(self.cols) and new_j in range(self.rows) and (new_i, new_j) not in self.visited and self.maze[new_j][new_i] == '-1':
-					queue_dir.append(path_dir + [(dx, dy)])
-					queue.append(((new_i, new_j), path + [(new_i, new_j)]))
+					# queue_dir.append(path_dir + [(dx, dy)])
+					queue.append(((new_i, new_j), path + [(dx, dy)]))
 					self.visited.add((new_i, new_j))
 
 #thuật toán dfs

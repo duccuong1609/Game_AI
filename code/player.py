@@ -113,11 +113,11 @@ class Player(pygame.sprite.Sprite):
 			for sprite in self.obstacle_sprites:
 				if sprite.hitbox.colliderect(self.hitbox):
 					if self.direction.y > 0: # moving down
-						self.hitbox.bottom = sprite.hitbox.top
-						self.hitbox.y -= 5
+						self.hitbox.bottom = sprite.hitbox.top - 5
+						# self.hitbox.y -= 5
 					if self.direction.y < 0: # moving up
-						self.hitbox.top = sprite.hitbox.bottom
-						self.hitbox.y += 5
+						self.hitbox.top = sprite.hitbox.bottom + 5
+						# self.hitbox.y += 5
 	# def cooldowns(self):
 	# 	current_time = pygame.time.get_ticks()
 
