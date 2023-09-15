@@ -1,4 +1,6 @@
 from collections import deque
+import time
+import timeit
 import pygame 
 from settings import *
 from support import import_folder
@@ -30,6 +32,7 @@ class Enemy(pygame.sprite.Sprite):
 		self.cols = len(self.maze[0])
 		self.paths = []
 		self.point = [(0, 0)]
+		self.execution_time = 0
 		# self.paths_dir = []
 
 
@@ -105,9 +108,10 @@ class Enemy(pygame.sprite.Sprite):
 			for sprite in self.obstacle_sprites:
 				if sprite.hitbox.colliderect(self.hitbox):
 					if self.direction.y > 0: # moving down
-						self.hitbox.bottom = sprite.hitbox.top
+						self.hitbox.bottom = sprite.hitbox.top - 5
 					if self.direction.y < 0: # moving up
-						self.hitbox.top = sprite.hitbox.bottom
+						self.hitbox.top = sprite.hitbox.bottom + 5
+
 
 
 	def animate(self):
@@ -123,30 +127,32 @@ class Enemy(pygame.sprite.Sprite):
 		self.get_status()
 		self.animate()
 
-def find_shortest_path(self,start, end):
+def find_shortest_path(self, start, end, algorithm):
 	if start == end:
-		# print("You lose")
-		self.point.clear()
 		self.paths.clear()
 		self.visited.clear()
+		self.point.clear()
 		self.point.append((0, 0))
-	bfs(self,start, end)
+	match algorithm:
+		case 0:
+			bfs(self,start, end)
+		case 1:
+			dfs(self, start, end)
+			
+			
 	
-
-def bfs(self,start, end):
+def bfs(self, start, end):
 	queue = deque()
 	queue.append((start, self.point))
-	# queue_dir = deque()
-	# queue_dir.append(self.point)
+
+	start_time = time.time()
 
 	while queue:
 		curr, path = queue.popleft()
-		# path_dir = queue_dir.popleft()
 		self.visited.add(curr)
 
 		if curr == end:
 			self.paths.append(path)
-			# self.paths_dir.append(path)
 		else:
 			i, j = curr[0], curr[1]
 			directions = [(1, 0), (-1, 0), (0, -1), (0, 1)] 
@@ -154,37 +160,30 @@ def bfs(self,start, end):
 			for dx, dy in directions:
 				new_i, new_j = i + dx, j + dy
 				if new_i in range(self.cols) and new_j in range(self.rows) and (new_i, new_j) not in self.visited and self.maze[new_j][new_i] == '-1':
-					# queue_dir.append(path_dir + [(dx, dy)])
 					queue.append(((new_i, new_j), path + [(dx, dy)]))
 					self.visited.add((new_i, new_j))
+	
+	end_time = time.time()
+	if end_time - start_time != 0:
+		self.execution_time = round(end_time - start_time, 5)
 
-#thuật toán dfs
-def dfs(self,start, end):
+def dfs(self, start, end):
+	
 	stack = deque()
-	# thêm vào hàng đợi (điểm, mảng đường đi)
-	stack.append((start, [start]))
+	stack.append((start, self.point))
 
 	while stack:
-		#gắn điểm hiện tại, đường đi bằng phần tử đầu tiên của hàng đợi
-		curr, path = stack.pop()
-		#thêm điểm hiện tại vào mảng đã đi qua
+		curr, path = stack.popleft()
 		self.visited.add(curr)
 
-		#kết thúc thuật toán
 		if curr == end:
 			self.paths.append(path)
-
 		else:
-			# i,j tọa độ x,y của điểm hiện tại
 			i, j = curr[0], curr[1]
-
-			#hướng left,right,top,bottom
 			directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 			
-			#xét 4 hướng xung quanh
 			for dx, dy in directions:
 				new_i, new_j = i + dx, j + dy
-				# nếu x,y của điểm hiện tại nằm trong map và không thuộc mảng đi qua và nó là điểm có thể đi được
-				if new_i in range(self.cols) and new_j in range(self.rows) and (new_i, new_j) not in self.visited and self.maze[new_i][new_j] == " ":
-					stack.append(((new_i, new_j), path + [(new_i, new_j)]))
+				if new_i in range(self.cols) and new_j in range(self.rows) and (new_i, new_j) not in self.visited and self.maze[new_j][new_i] == '-1':
+					stack.append(((new_i, new_j), path + [(dx, dy)]))
 					self.visited.add((new_i, new_j))
