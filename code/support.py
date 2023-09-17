@@ -28,6 +28,7 @@ def choose_enemy(num) :
     switcher = {
 		0: 'graphics/player/',
 		1: 'graphics/enemy/sasuke/',
-		2: 'graphics/enemy/obito',
+		2: 'graphics/enemy/naruto/',
+		3: 'graphics/enemy/obito',
 	}
     return switcher.get(num,0)

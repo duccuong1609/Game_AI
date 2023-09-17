@@ -142,7 +142,8 @@ def find_shortest_path(self, start, end, algorithm):
 			dfs(self, start, end)
 		case 2:
 			ids(self, start, end)
-			# dls(self, start, end, ids(self, start, end))
+			# if ids(self, start, end): 
+			# 	dls(self, start, end, ids(self, start, end))
 			
 			
 	
@@ -173,7 +174,6 @@ def bfs(self, start, end):
 		self.execution_time = round(end_time - start_time, 5)
 
 def dfs(self, start, end):
-	
 	stack = deque()
 	stack.append((start, self.point))
 
@@ -230,9 +230,11 @@ def dls(self, start, end, depth_limit):
 
 def ids(self, start, end):
 	i = 0
+ 
 	while True:
+		# i > self.rows tránh trường hợp tràn bộ nhớ nếu vào chỗ lỗi
 		dls(self, start, end, i)
-		if self.paths:
+		if self.paths or i > self.rows:
 			return
 		i += 1 
 # def ids(self, start, goal):

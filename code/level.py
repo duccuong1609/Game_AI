@@ -76,7 +76,8 @@ class Level:
 		#spawn player // bot
 		self.player = Player((1664,3328),[self.visible_sprites],self.obstacle_sprites)
 		self.sasuke = Enemy((768,1920),[self.visible_sprites],self.obstacle_sprites,SASUKE)
-		self.minato = Enemy((2112 - 64,3530),[self.visible_sprites],self.obstacle_sprites,MINATO)
+		self.minato = Enemy((2656, 1742),[self.visible_sprites],self.obstacle_sprites,MINATO)
+		self.naruto = Enemy((2112 - 64,3530),[self.visible_sprites],self.obstacle_sprites,NARUTO)
 
 	#finding the sprites index on group sprites (YSortCameraGroup)
 	def find_sprites_index(self,x,y):
@@ -193,7 +194,8 @@ class Level:
 				self.point -=1
 		#AI find path
 		find_shortest_path(self.sasuke,(int (self.sasuke.hitbox.x / 64), int (self.sasuke.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)), BFS)	
-		find_shortest_path(self.minato,(int (self.minato.hitbox.x / 64), int (self.minato.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)), DFS)		
+		find_shortest_path(self.minato,(int (self.minato.hitbox.x / 64), int (self.minato.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)), DFS)	
+		find_shortest_path(self.naruto,(int (self.naruto.hitbox.x / 64), int (self.naruto.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)), IDS)	
   		# update and draw the game
 		self.visible_sprites.custom_draw(self.player)
 		self.visible_sprites.update()
@@ -201,6 +203,7 @@ class Level:
 		check_point(self.point,230,1220)
 		check_enemy_searh_time(self.sasuke.execution_time,330,1220)
 		check_enemy_searh_time(self.minato.execution_time,430,1220)
+		check_enemy_searh_time(self.naruto.execution_time,530,1220)
 		#player_mode
 		check_mode(self.player.player_mode,690,1230)
 		#ending

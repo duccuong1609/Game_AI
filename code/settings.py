@@ -13,7 +13,8 @@ DLS = 2
 
 MINATO = 0
 SASUKE = 1
-OBITO = 2
+NARUTO = 2
+OBITO = 3
 
 
 MENU_BACKGROUND = pygame.image.load("graphics/menu/menu_background.png")
@@ -26,4 +27,3 @@ BG_VOLUME = 0.1
 EFFECT_VOLUME = 0.3
 DEBUFF_VOLUME = 0.5
 IDS = 2
-
