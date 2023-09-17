@@ -38,12 +38,18 @@ class Level:
 		self.food = pygame.mixer.Sound('audio/food.mp3')
 		self.boom = pygame.mixer.Sound('audio/boom.mp3')
 		self.die = pygame.mixer.Sound('audio/die.wav')
+		self.win = pygame.mixer.Sound('audio/you_win.mp3')
 		self.sound_point.set_volume(EFFECT_VOLUME)
 		self.food.set_volume(EFFECT_VOLUME)
 		self.boom.set_volume(DEBUFF_VOLUME)
 		self.die.set_volume(EFFECT_VOLUME)
 		self.lose_sound.set_volume(BG_VOLUME)
 		self.win_sound.set_volume(BG_VOLUME)
+		self.win.set_volume(EFFECT_VOLUME)
+		#text alpha
+		self.alpha_speed = 5  # Speed of alpha value change
+		self.alpha = 0  # Initial alpha value
+		self.clock = pygame.time.Clock() #clock changing text
 
 	def create_map(self):
 
@@ -105,18 +111,29 @@ class Level:
 	#checking and doing ending
 	def when_game_ending(self):
 		if self.player.win == False :
-			if (self.sasuke.catched and self.player.player_mode == "PLAYING MODE"):
+			if (self.sasuke.catched or self.naruto.catched) and self.player.player_mode == "PLAYING MODE":
 				self.ending("lose")
 			if (self.minato.catched and self.player.player_mode == "PLAYING MODE"):
 				self.ending("lose")
-		if (self.point >= 160 and self.player.player_mode == "PLAYING MODE" and  (2048 <= self.player.hitbox.x <= 2176) and (3584 <= self.player.hitbox.y <= 3712)) or self.player.win == True :
+		if (self.point >= 160000 and self.player.player_mode == "PLAYING MODE" and  (2048 <= self.player.hitbox.x <= 2176) and (3584 <= self.player.hitbox.y <= 3712)) or self.player.win == True :
 			self.ending("win")
-		
+	#draw a changing alpha text
+	def draw_changing_text(self,font,text,text_rect,color) :
+		self.alpha += self.alpha_speed
+		if self.alpha >= 255 or self.alpha <= 0:
+			self.alpha_speed *= - 1  # Reverse the direction of alpha change
+		text_surface =	font.render(text, True, color)
+		text_surface.set_alpha(self.alpha)
+
+		self.display_surface.blit(text_surface,text_rect)
+		self.clock.tick(30)
+	
 	#type of ending
 	def ending(self,type_ending) :
 		ending_font = pygame.font.Font("graphics/font/turok.ttf",100)
 		ending_sub_font = pygame.font.Font("graphics/font/turok.ttf",50)
 		point_font = pygame.font.Font("graphics/font/turok.ttf",30)
+		# lose ending
 		if type_ending == "lose" :
 			if self.player.lose == False :
 				self.die.play()
@@ -125,10 +142,13 @@ class Level:
 			self.player.lose = True
 			self.display_surface.fill((0,0,0))
 			ending_surf = ending_font.render(str("YOU LOSE"),True,'RED')
-			self.display_surface.blit(LOSE_BG,(-200,-100))
-			self.display_surface.blit(ending_surf,(530,290))
+			self.display_surface.blit(LOSE_BG,(-10,-100))
+			self.display_surface.blit(ending_surf,(510,290))
+			self.draw_changing_text(point_font,"PRESS SPACE TO PLAY AGAIN !",(530,690),(255, 255, 255))
+		# win ending
 		if type_ending == "win" :
 			if self.player.win == False :
+				self.win.play()
 				self.main_sound.stop()
 				self.win_sound.play()
 			self.player.win = True
@@ -137,10 +157,12 @@ class Level:
 			sub_surf = ending_sub_font.render(str("Congratulations"),True,'LIGHT CORAL')
 			point_surf = point_font.render("Your FINAL Point : " + str(self.point),True,'tomato')
 			self.display_surface.blit(WIN_BG,(0,-400))
-			self.display_surface.blit(ending_surf,(300,250))
+			self.display_surface.blit(ending_surf,(300,275))
 			self.display_surface.blit(sub_surf,(300,200))
-			self.display_surface.blit(point_surf,(320,375))
+			self.display_surface.blit(point_surf,(320,420))
 			self.display_surface.blit(VICTORY,(920,0))
+			self.draw_changing_text(point_font,"IF YOU WANT PLAY AGAIN, PRESS SPACE :3",(200,500),(0,0,0))
+
 	#checking and remove kunai from group sprites
 	def check_took_kunai(self):
 		if self.layouts is None :

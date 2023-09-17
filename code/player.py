@@ -26,7 +26,12 @@ class Player(pygame.sprite.Sprite):
 		self.obstacle_sprites = obstacle_sprites
 		# win
 		self.win = False
+		#lose
 		self.lose = False
+		#accept reset game
+		self.accept_reset = False
+		#out game
+		self.out_game = False
 
 	def import_player_assets(self):
 		character_path = 'graphics/enemy/obito/'
@@ -65,6 +70,10 @@ class Player(pygame.sprite.Sprite):
 				self.player_mode = "PLAYING MODE"
 			if keys[pygame.K_i] :
 				self.player_mode = "IMMORTAL MODE"
+			if keys[pygame.K_SPACE] :
+				self.accept_reset = True
+			if keys[pygame.K_ESCAPE] :
+				self.out_game = True
 			# # attack input 
 			# if keys[pygame.K_SPACE]:
 			# 	self.attacking = True
