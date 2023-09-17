@@ -33,6 +33,7 @@ class Enemy(pygame.sprite.Sprite):
 		self.paths = []
 		self.point = [(0, 0)]
 		self.execution_time = 0
+		self.catched = False
 		# self.paths_dir = []
 
 
@@ -128,11 +129,12 @@ class Enemy(pygame.sprite.Sprite):
 		self.animate()
 
 def find_shortest_path(self, start, end, algorithm):
-	if start == end:
+	if start == end :
 		self.paths.clear()
 		self.visited.clear()
 		self.point.clear()
 		self.point.append((0, 0))
+		self.catched = True
 	match algorithm:
 		case 0:
 			bfs(self,start, end)
@@ -172,6 +174,8 @@ def dfs(self, start, end):
 	stack = deque()
 	stack.append((start, self.point))
 
+	start_time = time.time()
+
 	while stack:
 		curr, path = stack.popleft()
 		self.visited.add(curr)
@@ -187,3 +191,6 @@ def dfs(self, start, end):
 				if new_i in range(self.cols) and new_j in range(self.rows) and (new_i, new_j) not in self.visited and self.maze[new_j][new_i] == '-1':
 					stack.append(((new_i, new_j), path + [(dx, dy)]))
 					self.visited.add((new_i, new_j))
+	end_time = time.time()
+	if end_time - start_time != 0:
+		self.execution_time = round(end_time - start_time, 5)

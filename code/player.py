@@ -14,7 +14,8 @@ class Player(pygame.sprite.Sprite):
 		self.status = 'down'
 		self.frame_index = 0
 		self.animation_speed = 0.15
-
+		#mode
+		self.player_mode = "PLAYING MODE"
 		# movement 
 		self.direction = pygame.math.Vector2()
 		self.speed = PLAYERSPEED
@@ -23,7 +24,9 @@ class Player(pygame.sprite.Sprite):
 		# self.attack_time = None
 
 		self.obstacle_sprites = obstacle_sprites
-
+		# win
+		self.win = False
+		self.lose = False
 
 	def import_player_assets(self):
 		character_path = 'graphics/enemy/obito/'
@@ -58,6 +61,10 @@ class Player(pygame.sprite.Sprite):
 			else:
 				self.direction.x = 0
 
+			if keys[pygame.K_p] :
+				self.player_mode = "PLAYING MODE"
+			if keys[pygame.K_i] :
+				self.player_mode = "IMMORTAL MODE"
 			# # attack input 
 			# if keys[pygame.K_SPACE]:
 			# 	self.attacking = True

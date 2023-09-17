@@ -2,18 +2,16 @@ import pygame, sys
 from settings import *
 from level import Level
 
-
 class Game:
 	def __init__(self):
 
 		# general setup
 		pygame.init()
-		self.screen = pygame.display.set_mode((WIDTH,HEIGHT))	
+		self.screen = pygame.display.set_mode((WIDTH,HEIGHT))
+		pygame.display.set_icon(GAME_ICON)
 		pygame.display.set_caption('Naruto')
 		self.clock = pygame.time.Clock()
-		main_sound = pygame.mixer.Sound('audio/nhac_nhu_db.mp3')
-		main_sound.play(loops=-1)
-		main_sound.set_volume(0.1)
+		#create level
 		self.level = Level()
 	
 	def run(self):
@@ -25,7 +23,7 @@ class Game:
 			self.screen.fill('black')
 			self.level.run()
 			pygame.display.update()
-			self.clock.tick(FPS)	
+			self.clock.tick(FPS)
 if __name__ == '__main__':
 	game = Game()
 	game.run()
