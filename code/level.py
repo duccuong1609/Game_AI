@@ -105,7 +105,7 @@ class Level:
 	#checking and doing ending
 	def when_game_ending(self):
 		if self.player.win == False :
-			if (self.sasuke.catched and self.player.player_mode == "PLAYING MODE"):
+			if (self.sasuke.catched or self.naruto.catched) and (self.player.player_mode == "PLAYING MODE"):
 				self.ending("lose")
 			if (self.minato.catched and self.player.player_mode == "PLAYING MODE"):
 				self.ending("lose")
