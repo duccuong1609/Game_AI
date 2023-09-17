@@ -140,6 +140,9 @@ def find_shortest_path(self, start, end, algorithm):
 			bfs(self,start, end)
 		case 1:
 			dfs(self, start, end)
+		case 2:
+			ids(self, start, end)
+			# dls(self, start, end, ids(self, start, end))
 			
 			
 	
@@ -184,7 +187,7 @@ def dfs(self, start, end):
 			self.paths.append(path)
 		else:
 			i, j = curr[0], curr[1]
-			directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+			directions = [(1, 0), (-1, 0), (0, -1), (0, 1)]
 			
 			for dx, dy in directions:
 				new_i, new_j = i + dx, j + dy
@@ -194,3 +197,58 @@ def dfs(self, start, end):
 	end_time = time.time()
 	if end_time - start_time != 0:
 		self.execution_time = round(end_time - start_time, 5)
+
+def dls(self, start, end, depth_limit):
+	visited = set()
+	stack = deque()
+	stack_path = deque()
+	stack_path.append(self.point)
+	stack.append((start, 0))
+
+	start_time = time.time()
+
+	while stack:
+		curr, depth = stack.popleft()
+		visited.add(curr)
+
+		path = stack_path.popleft()
+		if curr == end:
+			self.paths.append(path)
+		else:
+			i, j = curr[0], curr[1]
+			directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+			for dx, dy in directions:
+					new_i, new_j = i + dx, j + dy
+					if depth < depth_limit and new_i in range(self.cols) and new_j in range(self.rows) and (new_i, new_j) not in visited and self.maze[new_j][new_i] == '-1':
+						stack.append(((new_i, new_j), depth + 1))
+						stack_path.append(path + [(dx, dy)])
+						visited.add((new_i, new_j))
+	end_time = time.time()
+	if end_time - start_time != 0:
+		self.execution_time = round(end_time - start_time, 5)
+	 
+
+def ids(self, start, end):
+	i = 0
+	while True:
+		dls(self, start, end, i)
+		if self.paths:
+			return
+		i += 1 
+# def ids(self, start, goal):
+# 	visited = set()
+# 	stack = deque()
+# 	stack.append((start, 0)) 
+# 	while stack:
+# 		curr, level = stack.popleft()
+# 		visited.add(curr)
+# 		if curr == goal:
+# 			return level
+# 		else:
+# 			i, j = curr[0], curr[1]
+# 			directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+# 			for dx, dy in directions:
+# 				new_i, new_j = i + dx, j + dy
+# 				if new_i in range(self.cols) and new_j in range(self.rows) and (new_i, new_j) not in visited and self.maze[new_j][new_i] == '-1':                                       
+# 					stack.append(((new_i, new_j), level + 1))
+# 					visited.add((new_i, new_j))

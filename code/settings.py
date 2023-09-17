@@ -25,3 +25,5 @@ GAME_ICON = pygame.image.load("graphics/menu/icon.png")
 BG_VOLUME = 0.1
 EFFECT_VOLUME = 0.3
 DEBUFF_VOLUME = 0.5
+IDS = 2
+
