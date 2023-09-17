@@ -7,21 +7,39 @@ class Game:
 
 		# general setup
 		pygame.init()
-		self.screen = pygame.display.set_mode((WIDTH,HEIGTH))
-		pygame.display.set_caption('Nảuto')
+		self.screen = pygame.display.set_mode((WIDTH,HEIGHT))
+		pygame.display.set_icon(GAME_ICON)
+		pygame.display.set_caption('Naruto')
 		self.clock = pygame.time.Clock()
-		main_sound = pygame.mixer.Sound('audio/main.wav')
-		main_sound.play(loops=-1)
-		main_sound.set_volume(0.1)
+		#create level
 		self.level = Level()
 	
 	def run(self):
 		while True:
 			for event in pygame.event.get():
+				#out game mouse
 				if event.type == pygame.QUIT:
 					pygame.quit()
 					sys.exit()
-
+			#reset game
+			if(game.level.player.win == True or game.level.player.lose ==True) and game.level.player.accept_reset == True :
+					#stop lose game sound
+					if(game.level.player.lose == True) :
+						self.level.lose_sound.stop()
+					#stop win game sound
+					if(game.level.player.win == True) :
+						self.level.win_sound.stop()
+					#cook player
+					self.level.player = ()
+					#cook level
+					self.level = ()
+					#init again
+					self.level = Level()
+			#out game keyboard
+			if game.level.player.out_game == True :
+				pygame.quit()
+				sys.exit()
+			#run game
 			self.screen.fill('black')
 			self.level.run()
 			pygame.display.update()

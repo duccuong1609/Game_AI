@@ -7,14 +7,15 @@ class Player(pygame.sprite.Sprite):
 		super().__init__(groups)
 		self.image = pygame.image.load('graphics/test/player.png').convert_alpha()
 		self.rect = self.image.get_rect(topleft = pos)
-		self.hitbox = self.rect.inflate(0,-26)
+		self.hitbox = self.rect.inflate(0, 0)	
 
 		# graphics setup
 		self.import_player_assets()
 		self.status = 'down'
 		self.frame_index = 0
-		self.animation_speed = 0.3
-
+		self.animation_speed = 0.15
+		#mode
+		self.player_mode = "PLAYING MODE"
 		# movement 
 		self.direction = pygame.math.Vector2()
 		self.speed = PLAYERSPEED
@@ -23,6 +24,14 @@ class Player(pygame.sprite.Sprite):
 		# self.attack_time = None
 
 		self.obstacle_sprites = obstacle_sprites
+		# win
+		self.win = False
+		#lose
+		self.lose = False
+		#accept reset game
+		self.accept_reset = False
+		#out game
+		self.out_game = False
 
 	def import_player_assets(self):
 		character_path = 'graphics/enemy/obito/'
@@ -57,6 +66,14 @@ class Player(pygame.sprite.Sprite):
 			else:
 				self.direction.x = 0
 
+			if keys[pygame.K_p] :
+				self.player_mode = "PLAYING MODE"
+			if keys[pygame.K_i] :
+				self.player_mode = "IMMORTAL MODE"
+			if keys[pygame.K_SPACE] :
+				self.accept_reset = True
+			if keys[pygame.K_ESCAPE] :
+				self.out_game = True
 			# # attack input 
 			# if keys[pygame.K_SPACE]:
 			# 	self.attacking = True
@@ -112,10 +129,11 @@ class Player(pygame.sprite.Sprite):
 			for sprite in self.obstacle_sprites:
 				if sprite.hitbox.colliderect(self.hitbox):
 					if self.direction.y > 0: # moving down
-						self.hitbox.bottom = sprite.hitbox.top
+						self.hitbox.bottom = sprite.hitbox.top - 5
+						# self.hitbox.y -= 5
 					if self.direction.y < 0: # moving up
-						self.hitbox.top = sprite.hitbox.bottom
-
+						self.hitbox.top = sprite.hitbox.bottom + 5
+						# self.hitbox.y += 5
 	# def cooldowns(self):
 	# 	current_time = pygame.time.get_ticks()
 
@@ -141,3 +159,8 @@ class Player(pygame.sprite.Sprite):
 		self.get_status()
 		self.animate()
 		self.move(self.speed)
+
+	def changePos(self, x, y):
+		self.direction.x = x
+		self.direction.y = y
+		self.update()
