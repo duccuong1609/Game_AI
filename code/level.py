@@ -62,8 +62,9 @@ class Level:
 							Tile((x,y),[self.visible_sprites],'object',surf)
 		#spawn player // bot
 		self.player = Player((1664,3328),[self.visible_sprites],self.obstacle_sprites)
-		self.enemy = Enemy((768,1920),[self.visible_sprites],self.obstacle_sprites,1)
-		self.enemy_2 = Enemy((2112 - 64,3530),[self.visible_sprites],self.obstacle_sprites,0)
+		self.enemy = Enemy((768,1920),[self.visible_sprites],self.obstacle_sprites,SASUKE)
+		self.enemy_2 = Enemy((2112 - 64,3530),[self.visible_sprites],self.obstacle_sprites,NARUTO)
+		self.enemy_3 = Enemy((2656, 1742),[self.visible_sprites],self.obstacle_sprites,MINATO)
 
 	#finding the sprites index on group sprites (YSortCameraGroup)
 	def find_sprites_index(self,x,y):
@@ -138,6 +139,7 @@ class Level:
 		#AI find path
 		find_shortest_path(self.enemy,(int (self.enemy.hitbox.x / 64), int (self.enemy.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)), BFS)	
 		find_shortest_path(self.enemy_2,(int (self.enemy_2.hitbox.x / 64), int (self.enemy_2.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)), IDS)		# update and draw the game
+		find_shortest_path(self.enemy_3,(int (self.enemy_3.hitbox.x / 64), int (self.enemy_3.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)), DFS)		# update and draw the game
 		self.visible_sprites.custom_draw(self.player)
 		self.visible_sprites.update()
 		#check player status
@@ -148,7 +150,7 @@ class Level:
 			self.point -=1
 		# debug(self.point)
 		# debug(self.player.hitbox.y)
-		debug(self.enemy_2.execution_time)
+		# debug(self.player.hitbox.y)
 class YSortCameraGroup(pygame.sprite.Group):
 	def __init__(self):
 
