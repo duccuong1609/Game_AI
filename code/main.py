@@ -22,21 +22,19 @@ class Game:
 					pygame.quit()
 					sys.exit()
 			#reset game
-			if(game.level.player.win == True or game.level.player.lose ==True) and game.level.player.accept_reset == True :
+			if(game.level.player.win or game.level.player.lose) and game.level.player.accept_reset:
 					#stop lose game sound
 					if(game.level.player.lose == True) :
 						self.level.lose_sound.stop()
 					#stop win game sound
 					if(game.level.player.win == True) :
 						self.level.win_sound.stop()
-					#cook player
-					self.level.player = ()
 					#cook level
 					self.level = ()
 					#init again
 					self.level = Level()
 			#out game keyboard
-			if game.level.player.out_game == True :
+			if game.level.player.out_game == True:
 				pygame.quit()
 				sys.exit()
 			#run game

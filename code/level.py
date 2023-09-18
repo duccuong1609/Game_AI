@@ -80,10 +80,11 @@ class Level:
 							surf = graphics['objects'][int(col)]
 							Tile((x,y),[self.visible_sprites],'object',surf)
 		#spawn player // bot
-		self.player = Player((1664,3328),[self.visible_sprites],self.obstacle_sprites)
-		self.sasuke = Enemy((768,1920),[self.visible_sprites],self.obstacle_sprites,TSUNADE)
+		self.player = Player((1664, 3328),[self.visible_sprites],self.obstacle_sprites)
+		self.tsunade = Enemy((768, 1920),[self.visible_sprites],self.obstacle_sprites,TSUNADE)
 		self.minato = Enemy((2656, 1742),[self.visible_sprites],self.obstacle_sprites,MINATO)
-		self.naruto = Enemy((2112 - 64,3530),[self.visible_sprites],self.obstacle_sprites,TOBIRAMA)
+		self.kakashi = Enemy((2048, 3520),[self.visible_sprites],self.obstacle_sprites,KAKASHI)
+		self.tobirama = Enemy((256, 2496),[self.visible_sprites],self.obstacle_sprites,TOBIRAMA)
 
 	#finding the sprites index on group sprites (YSortCameraGroup)
 	def find_sprites_index(self,x,y):
@@ -110,8 +111,8 @@ class Level:
 
 	#checking and doing ending
 	def when_game_ending(self):
-		if self.player.win == False :
-			if (self.sasuke.catched or self.naruto.catched) and self.player.player_mode == "PLAYING MODE":
+		if self.player.win == False:
+			if (self.tsunade.catched or self.kakashi.catched) and self.player.player_mode == "PLAYING MODE":
 				self.ending("lose")
 			if (self.minato.catched and self.player.player_mode == "PLAYING MODE"):
 				self.ending("lose")
@@ -215,17 +216,19 @@ class Level:
 			if self.point > 0 :
 				self.point -=1
 		#AI find path
-		find_shortest_path(self.sasuke,(int (self.sasuke.hitbox.x / 64), int (self.sasuke.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)), BFS)	
+		find_shortest_path(self.tsunade,(int (self.tsunade.hitbox.x / 64), int (self.tsunade.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)), BFS)	
 		find_shortest_path(self.minato,(int (self.minato.hitbox.x / 64), int (self.minato.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)), DFS)	
-		find_shortest_path(self.naruto,(int (self.naruto.hitbox.x / 64), int (self.naruto.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)), IDS)	
+		find_shortest_path(self.kakashi,(int (self.kakashi.hitbox.x / 64), int (self.kakashi.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)), IDS)
+		find_shortest_path(self.tobirama,(int (self.tobirama.hitbox.x / 64), int (self.tobirama.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)), ASTAR)	
   		# update and draw the game
 		self.visible_sprites.custom_draw(self.player)
 		self.visible_sprites.update()
 		#check my point
 		check_point(self.point,230,1220)
-		check_enemy_searh_time(self.sasuke.execution_time,330,1220)
+		check_enemy_searh_time(self.tsunade.execution_time,330,1220)
 		check_enemy_searh_time(self.minato.execution_time,430,1220)
-		check_enemy_searh_time(self.naruto.execution_time,530,1220)
+		check_enemy_searh_time(self.kakashi.execution_time,530,1220)
+		check_enemy_searh_time(self.tobirama.execution_time,630,1220)
 		#player_mode
 		check_mode(self.player.player_mode,690,1230)
 		#ending

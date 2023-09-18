@@ -70,7 +70,7 @@ class Player(pygame.sprite.Sprite):
 				self.player_mode = "PLAYING MODE"
 			if keys[pygame.K_i] :
 				self.player_mode = "IMMORTAL MODE"
-			if keys[pygame.K_SPACE] :
+			if keys[pygame.K_SPACE] and (self.win or self.lose):
 				self.accept_reset = True
 			if keys[pygame.K_ESCAPE] :
 				self.out_game = True
