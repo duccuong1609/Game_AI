@@ -108,13 +108,22 @@ class Level:
 				if(self.player.speed <PLAYERSPEED) :
 					self.player.speed += (PLAYERSPEED -self.player.speed)
 	
-
+	#catched range
+	def check_catched(self,enemy) :
+		if (enemy.hitbox.x - 12 <= self.player.hitbox.x <= enemy.hitbox.x + 12) and (enemy.hitbox.y - 12 <= self.player.hitbox.y <= enemy.hitbox.y + 12) :
+			enemy.catched = True
 	#checking and doing ending
 	def when_game_ending(self):
 		if self.player.win == False:
+      
+			self.check_catched(self.tsunade)
+			self.check_catched(self.kakashi)
+			self.check_catched(self.minato)
+			self.check_catched(self.tobirama)
+
 			if (self.tsunade.catched or self.kakashi.catched) and self.player.player_mode == "PLAYING MODE":
 				self.ending("lose")
-			if (self.minato.catched and self.player.player_mode == "PLAYING MODE"):
+			if (self.minato.catched or self.tobirama.catched) and self.player.player_mode == "PLAYING MODE":
 				self.ending("lose")
 		if (self.point >= 160000 and self.player.player_mode == "PLAYING MODE" and  (2048 <= self.player.hitbox.x <= 2176) and (3584 <= self.player.hitbox.y <= 3712)) or self.player.win == True :
 			self.ending("win")

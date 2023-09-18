@@ -32,9 +32,6 @@ class Player(pygame.sprite.Sprite):
 		#out game
 		self.out_game = False
 
-	def draw_hitbox(self, screen):
-		pygame.draw.rect(screen, (255, 0, 0), self.hitbox, 2)
-
 	def import_player_assets(self):
 		character_path = 'graphics/enemy/obito/'
 		self.animations = {'up': [],'down': [],'left': [],'right': [],
