@@ -110,7 +110,7 @@ class Level:
 	
 	#catched range
 	def check_catched(self,enemy) :
-		if (enemy.hitbox.x - 12 <= self.player.hitbox.x <= enemy.hitbox.x + 12) and (enemy.hitbox.y - 12 <= self.player.hitbox.y <= enemy.hitbox.y + 12) :
+		if (enemy.hitbox.x - 12 <= self.player.hitbox.x <= enemy.hitbox.x + 12) and (enemy.hitbox.y - 16 <= self.player.hitbox.y <= enemy.hitbox.y + 16) :
 			enemy.catched = True
 	#checking and doing ending
 	def when_game_ending(self):
@@ -225,10 +225,10 @@ class Level:
 			if self.point > 0 :
 				self.point -=1
 		#AI find path
-		find_shortest_path(self.tsunade,((int)(self.tsunade.hitbox.x / 64), (int)(self.tsunade.hitbox.y / 64)), ((int)(self.player.hitbox.x / 64), (int)(self.player.hitbox.y / 64)), BFS)	
-		find_shortest_path(self.minato,((int)(self.minato.hitbox.x / 64), (int)(self.minato.hitbox.y / 64)), ((int)(self.player.hitbox.x / 64), (int)(self.player.hitbox.y / 64)), DFS)	
-		find_shortest_path(self.kakashi,((int)(self.kakashi.hitbox.x / 64), (int)(self.kakashi.hitbox.y / 64)), ((int)(self.player.hitbox.x / 64), (int)(self.player.hitbox.y / 64)), IDS)
-		find_shortest_path(self.tobirama,((int)(self.tobirama.hitbox.x / 64), (int)(self.tobirama.hitbox.y / 64)), ((int)(self.player.hitbox.x / 64), round(self.player.hitbox.y / 64)), ASTAR)
+		find_shortest_path(self.tsunade,(round(self.tsunade.hitbox.x / 64), round(self.tsunade.hitbox.y / 64)), (round(self.player.hitbox.x / 64), round(self.player.hitbox.y / 64)), BFS)	
+		find_shortest_path(self.minato,(round(self.minato.hitbox.x / 64), round(self.minato.hitbox.y / 64)), (round(self.player.hitbox.x / 64), round(self.player.hitbox.y / 64)), DFS)	
+		find_shortest_path(self.kakashi,(round(self.kakashi.hitbox.x / 64), round(self.kakashi.hitbox.y / 64)), (round(self.player.hitbox.x / 64), round(self.player.hitbox.y / 64)), IDS)
+		find_shortest_path(self.tobirama,(round(self.tobirama.hitbox.x / 64), round(self.tobirama.hitbox.y / 64)), (round(self.player.hitbox.x / 64), round(self.player.hitbox.y / 64)), ASTAR)
   		# update and draw the game
 		self.visible_sprites.custom_draw(self.player)
 		self.visible_sprites.update()
