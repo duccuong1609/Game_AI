@@ -13,7 +13,6 @@ class Game:
 		self.clock = pygame.time.Clock()
 		#create level
 		self.level = Level()
-	
 	def run(self):
 		while True:
 			for event in pygame.event.get():
@@ -22,7 +21,7 @@ class Game:
 					pygame.quit()
 					sys.exit()
 			#reset game
-			if(game.level.player.win or game.level.player.lose) and game.level.player.accept_reset:
+			if game.level.player.accept_reset:
 					#stop lose game sound
 					if(game.level.player.lose == True) :
 						self.level.lose_sound.stop()
