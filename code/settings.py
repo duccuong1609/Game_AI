@@ -4,7 +4,7 @@ from pygame.locals import *
 # class define constants
 WIDTH    = 1520
 HEIGHT  = 760
-FPS      = 160
+FPS      = 120
 TILESIZE = 64
 PLAYERSPEED = 8
 BFS = 0
@@ -15,7 +15,10 @@ MINATO = 0
 SASUKE = 1
 NARUTO = 2
 OBITO = 3
-
+KAKASHI = 4
+SASUKE_2ND = 5
+TSUNADE = 6
+TOBIRAMA = 7
 
 MENU_BACKGROUND = pygame.image.load("graphics/menu/menu_background.png")
 VICTORY = pygame.image.load("graphics/menu/victory.png")

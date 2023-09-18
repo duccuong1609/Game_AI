@@ -81,9 +81,9 @@ class Level:
 							Tile((x,y),[self.visible_sprites],'object',surf)
 		#spawn player // bot
 		self.player = Player((1664,3328),[self.visible_sprites],self.obstacle_sprites)
-		self.sasuke = Enemy((768,1920),[self.visible_sprites],self.obstacle_sprites,SASUKE)
+		self.sasuke = Enemy((768,1920),[self.visible_sprites],self.obstacle_sprites,TSUNADE)
 		self.minato = Enemy((2656, 1742),[self.visible_sprites],self.obstacle_sprites,MINATO)
-		self.naruto = Enemy((2112 - 64,3530),[self.visible_sprites],self.obstacle_sprites,NARUTO)
+		self.naruto = Enemy((2112 - 64,3530),[self.visible_sprites],self.obstacle_sprites,TOBIRAMA)
 
 	#finding the sprites index on group sprites (YSortCameraGroup)
 	def find_sprites_index(self,x,y):
@@ -239,6 +239,7 @@ class YSortCameraGroup(pygame.sprite.Group):
 		#font 
 		self.menu_font = pygame.font.Font("graphics/font/turok.ttf",40)
 		self.label_font = pygame.font.Font("graphics/font/njnaruto.ttf",15)
+		self.struct_font = pygame.font.SysFont(None,18,bold=False,italic=True)
 		# general setup 
 		super().__init__()
 		self.display_surface = pygame.display.get_surface()
@@ -246,7 +247,10 @@ class YSortCameraGroup(pygame.sprite.Group):
 		self.menu_surface = pygame.Surface((350, HEIGHT))
 		self.menu_surface.blit(MENU_BACKGROUND,(0,0))
 		self.draw_text("properties",self.menu_font,(255,255,255),80,20)
-		self.draw_text("???   < In Developing >",self.label_font,(255,255,255),50,90)
+		self.draw_text("key instruction",self.label_font,(255,255,255),50,90)
+		self.draw_text("MOVING : UP DOWN LEFT RIGHT",self.struct_font,"light coral",50,115)
+		self.draw_text("ZOOM CAMERA : Q (ZOOM IN), E (ZOOM OUT)",self.struct_font,"light coral",50,140)
+		self.draw_text("CHANGE MODE : I (IMMORTAL), P (PLAYING)",self.struct_font,"light coral",50,165)
 		self.draw_text("Your POINT",self.label_font,(255,255,255),50,190)
 		self.draw_text("Time search ENEMY USING BFS",self.label_font,(255,255,255),50,290)
 		self.draw_text("Time search ENEMY USING DFS",self.label_font,(255,255,255),50,390)

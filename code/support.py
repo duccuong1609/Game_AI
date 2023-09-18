@@ -29,6 +29,10 @@ def choose_enemy(num) :
 		0: 'graphics/player/',
 		1: 'graphics/enemy/sasuke/',
 		2: 'graphics/enemy/naruto/',
-		3: 'graphics/enemy/obito',
+		3: 'graphics/enemy/obito/',
+		4: 'graphics/enemy/kakashi/',
+		5: 'graphics/enemy/sasuke_2nd/',
+		6: 'graphics/enemy/tsunade/',
+		7: 'graphics/enemy/tobirama/',
 	}
     return switcher.get(num,0)
