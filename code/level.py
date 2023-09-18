@@ -237,7 +237,7 @@ class Level:
 		self.check_took_kunai()
 		#restore speed for player
 		self.restore_speed()
-		debug(self.player.rect)
+  
 class YSortCameraGroup(pygame.sprite.Group):
 	def __init__(self):
 		#font 
