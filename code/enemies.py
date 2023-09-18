@@ -1,4 +1,5 @@
 from collections import deque
+import math
 import time
 import timeit
 import pygame 
@@ -239,6 +240,7 @@ def ids(self, start, end):
 
 def heuristic(node,goal):
     return abs(node[0] - goal[0]) + abs(node[1] - goal[1])
+	# return math.sqrt((node[0] - goal[0]) * (node[0] - goal[0]) + (node[1] - goal[1]) * (node[1] - goal[1]))
 
 def aStar(self, start, end):
 	g_score = {}
