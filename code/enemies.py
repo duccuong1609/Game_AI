@@ -110,9 +110,9 @@ class Enemy(pygame.sprite.Sprite):
 			for sprite in self.obstacle_sprites:
 				if sprite.hitbox.colliderect(self.hitbox):
 					if self.direction.y > 0: # moving down
-						self.hitbox.bottom = sprite.hitbox.top - 5
+						self.hitbox.bottom = sprite.hitbox.top
 					if self.direction.y < 0: # moving up
-						self.hitbox.top = sprite.hitbox.bottom + 5
+						self.hitbox.top = sprite.hitbox.bottom
 
 
 
@@ -205,7 +205,7 @@ def dls(self, start, end, depth_limit):
 	stack_path = deque()
 	stack_path.append(self.point)
 	stack.append((start, 0))
-
+ 
 	start_time = time.time()
 
 	while stack:
@@ -236,8 +236,10 @@ def ids(self, start, end):
 		if self.paths:
 			return
 		i += 1 
+
 def heuristic(node,goal):
     return abs(node[0] - goal[0]) + abs(node[1] - goal[1])
+
 def aStar(self, start, end):
 	g_score = {}
 	f_score = {}
