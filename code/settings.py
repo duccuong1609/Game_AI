@@ -7,10 +7,13 @@ HEIGHT  = 760
 FPS      = 120
 TILESIZE = 64
 PLAYERSPEED = 8
+
 BFS = 0
 DFS = 1
 DLS = 2
+IDS = 2
 ASTAR = 3
+
 MINATO = 0
 SASUKE = 1
 NARUTO = 2
@@ -29,4 +32,9 @@ GAME_ICON = pygame.image.load("graphics/menu/icon.png")
 BG_VOLUME = 0.1
 EFFECT_VOLUME = 0.3
 DEBUFF_VOLUME = 0.5
-IDS = 2
+
+#MUTE
+# BG_VOLUME = 0
+# EFFECT_VOLUME = 0
+# DEBUFF_VOLUME = 0
+
