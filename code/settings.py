@@ -10,7 +10,7 @@ PLAYERSPEED = 8
 BFS = 0
 DFS = 1
 DLS = 2
-
+ASTAR = 3
 MINATO = 0
 SASUKE = 1
 NARUTO = 2
@@ -20,7 +20,7 @@ OBITO = 3
 MENU_BACKGROUND = pygame.image.load("graphics/menu/menu_background.png")
 VICTORY = pygame.image.load("graphics/menu/victory.png")
 WIN_BG = pygame.image.load("graphics/menu/bg.jpg")
-LOSE_BG = pygame.image.load("graphics/menu/lose_BG.png")
+LOSE_BG = pygame.image.load("graphics/menu/lose_BG.jpg")
 GAME_ICON = pygame.image.load("graphics/menu/icon.png")
 
 BG_VOLUME = 0.1

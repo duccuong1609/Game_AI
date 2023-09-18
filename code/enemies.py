@@ -7,6 +7,7 @@ from support import import_folder
 from support import import_csv_layout
 from support import choose_enemy
 from debug import *
+from queue import PriorityQueue
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -129,7 +130,7 @@ class Enemy(pygame.sprite.Sprite):
 		self.animate()
 
 def find_shortest_path(self, start, end, algorithm):
-	if start == end :
+	if start == end:
 		self.paths.clear()
 		self.visited.clear()
 		self.point.clear()
@@ -142,8 +143,8 @@ def find_shortest_path(self, start, end, algorithm):
 			dfs(self, start, end)
 		case 2:
 			ids(self, start, end)
-			# if ids(self, start, end): 
-			# 	dls(self, start, end, ids(self, start, end))
+		case 3:
+			aStar(self, start, end)
 			
 			
 	
@@ -210,7 +211,6 @@ def dls(self, start, end, depth_limit):
 	while stack:
 		curr, depth = stack.popleft()
 		visited.add(curr)
-
 		path = stack_path.popleft()
 		if curr == end:
 			self.paths.append(path)
@@ -230,27 +230,58 @@ def dls(self, start, end, depth_limit):
 
 def ids(self, start, end):
 	i = 0
- 
-	while True:
-		# i > self.rows tránh trường hợp tràn bộ nhớ nếu vào chỗ lỗi
+	# i > self.rows tránh trường hợp tràn bộ nhớ nếu vào chỗ lỗi
+	while True and i <= self.rows:
 		dls(self, start, end, i)
-		if self.paths or i > self.rows:
+		if self.paths:
 			return
 		i += 1 
-# def ids(self, start, goal):
-# 	visited = set()
-# 	stack = deque()
-# 	stack.append((start, 0)) 
-# 	while stack:
-# 		curr, level = stack.popleft()
-# 		visited.add(curr)
-# 		if curr == goal:
-# 			return level
-# 		else:
-# 			i, j = curr[0], curr[1]
-# 			directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-# 			for dx, dy in directions:
-# 				new_i, new_j = i + dx, j + dy
-# 				if new_i in range(self.cols) and new_j in range(self.rows) and (new_i, new_j) not in visited and self.maze[new_j][new_i] == '-1':                                       
-# 					stack.append(((new_i, new_j), level + 1))
-# 					visited.add((new_i, new_j))
+def heuristic(node,goal):
+    return abs(node[0] - goal[0]) + abs(node[1] - goal[1])
+def aStar(self, start, end):
+	g_score = {}
+	f_score = {}
+	for i in range(self.cols):
+		for j in range(self.rows - 1):
+			g_score[(i, j)] = float('inf')
+			f_score[(i, j)] = float('inf')
+	g_score[start] = 0
+	f_score[start] = heuristic(start, end)
+	queue = PriorityQueue()
+    #queue.put(f(n) = g(n) + h, h, point (first se bang start))
+	queue.put((heuristic(start, end), heuristic(start, end), start))
+	path = {}
+	start_time = time.time()
+	while queue:
+		curr = queue.get()[2]
+		if curr == end:
+			break
+		else:
+			i, j = curr[0], curr[1]
+			directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+			for dx, dy in directions:
+					new_i, new_j = i + dx, j + dy
+					if new_i in range(self.cols) and new_j in range(self.rows) and self.maze[new_j][new_i] == '-1':
+						childNode = (new_i, new_j)
+						temp_g_score = g_score[curr] + 1
+						temp_f_score = temp_g_score + heuristic(childNode,end)
+						if temp_f_score < f_score[childNode]:
+							g_score[childNode] = temp_g_score
+							f_score[childNode] = temp_f_score
+							queue.put((temp_f_score,heuristic(childNode,end),childNode))
+							path[childNode] = curr
+	end_time = time.time()
+	if end_time - start_time != 0:
+		self.execution_time = round(end_time - start_time, 5)
+	fwdPath = []
+	node = end
+	# path: {(25, 55): (26, 55), ....}
+	while node != start:
+		directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+		for dx, dy in directions:
+			i, j = path[node][0] + dx, path[node][1] + dy
+			if (i, j) == node:
+				fwdPath.append((dx, dy))
+				break
+		node = path[node]
+	self.paths.append(self.point  + fwdPath[::-1])

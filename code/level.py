@@ -29,21 +29,27 @@ class Level:
 		# sprite setup
 		self.create_map()
 		#sound effect game
-		self.main_sound = pygame.mixer.Sound('audio/nhac_nhu_db.mp3')
-		self.main_sound.play(loops=-1)
-		self.main_sound.set_volume(BG_VOLUME)
-		self.lose_sound = pygame.mixer.Sound('audio/lose.mp3')
-		self.win_sound = pygame.mixer.Sound('audio/victory.mp3')
-		self.sound_point = pygame.mixer.Sound('audio/loot_coin.mp3')
-		self.food = pygame.mixer.Sound('audio/food.mp3')
-		self.boom = pygame.mixer.Sound('audio/boom.mp3')
-		self.die = pygame.mixer.Sound('audio/die.wav')
-		self.sound_point.set_volume(EFFECT_VOLUME)
-		self.food.set_volume(EFFECT_VOLUME)
-		self.boom.set_volume(DEBUFF_VOLUME)
-		self.die.set_volume(EFFECT_VOLUME)
-		self.lose_sound.set_volume(BG_VOLUME)
-		self.win_sound.set_volume(BG_VOLUME)
+		# self.main_sound = pygame.mixer.Sound('audio/nhac_nhu_db.mp3')
+		# self.main_sound.play(loops=-1)
+		# self.main_sound.set_volume(BG_VOLUME)
+		# self.lose_sound = pygame.mixer.Sound('audio/lose.mp3')
+		# self.win_sound = pygame.mixer.Sound('audio/victory.mp3')
+		# self.sound_point = pygame.mixer.Sound('audio/loot_coin.mp3')
+		# self.food = pygame.mixer.Sound('audio/food.mp3')
+		# self.boom = pygame.mixer.Sound('audio/boom.mp3')
+		# self.die = pygame.mixer.Sound('audio/die.wav')
+		# self.win = pygame.mixer.Sound('audio/you_win.mp3')
+		# self.sound_point.set_volume(EFFECT_VOLUME)
+		# self.food.set_volume(EFFECT_VOLUME)
+		# self.boom.set_volume(DEBUFF_VOLUME)
+		# self.die.set_volume(EFFECT_VOLUME)
+		# self.lose_sound.set_volume(BG_VOLUME)
+		# self.win_sound.set_volume(BG_VOLUME)
+		# self.win.set_volume(EFFECT_VOLUME)
+		#text alpha
+		self.alpha_speed = 5  # Speed of alpha value change
+		self.alpha = 0  # Initial alpha value
+		self.clock = pygame.time.Clock() #clock changing text
 
 	def create_map(self):
 
@@ -74,10 +80,10 @@ class Level:
 							surf = graphics['objects'][int(col)]
 							Tile((x,y),[self.visible_sprites],'object',surf)
 		#spawn player // bot
-		self.player = Player((1664,3328),[self.visible_sprites],self.obstacle_sprites)
-		self.sasuke = Enemy((768,1920),[self.visible_sprites],self.obstacle_sprites,SASUKE)
+		self.player = Player((1664, 3328),[self.visible_sprites],self.obstacle_sprites)
+		self.sasuke = Enemy((768, 1920),[self.visible_sprites],self.obstacle_sprites,SASUKE)
 		self.minato = Enemy((2656, 1742),[self.visible_sprites],self.obstacle_sprites,MINATO)
-		self.naruto = Enemy((2112 - 64,3530),[self.visible_sprites],self.obstacle_sprites,NARUTO)
+		self.naruto = Enemy((2048, 3520),[self.visible_sprites],self.obstacle_sprites,NARUTO)
 
 	#finding the sprites index on group sprites (YSortCameraGroup)
 	def find_sprites_index(self,x,y):
@@ -104,31 +110,45 @@ class Level:
 
 	#checking and doing ending
 	def when_game_ending(self):
-		if self.player.win == False :
-			if (self.sasuke.catched or self.naruto.catched) and (self.player.player_mode == "PLAYING MODE"):
+		if self.player.win == False:
+			if (self.sasuke.catched or self.naruto.catched) and self.player.player_mode == "PLAYING MODE":
 				self.ending("lose")
 			if (self.minato.catched and self.player.player_mode == "PLAYING MODE"):
 				self.ending("lose")
-		if (self.point >= 160 and self.player.player_mode == "PLAYING MODE" and  (2048 <= self.player.hitbox.x <= 2176) and (3584 <= self.player.hitbox.y <= 3712)) or self.player.win == True :
+		if (self.point >= 160000 and self.player.player_mode == "PLAYING MODE" and  (2048 <= self.player.hitbox.x <= 2176) and (3584 <= self.player.hitbox.y <= 3712)) or self.player.win == True :
 			self.ending("win")
-		
+	#draw a changing alpha text
+	def draw_changing_text(self,font,text,text_rect,color) :
+		self.alpha += self.alpha_speed
+		if self.alpha >= 255 or self.alpha <= 0:
+			self.alpha_speed *= - 1  # Reverse the direction of alpha change
+		text_surface =	font.render(text, True, color)
+		text_surface.set_alpha(self.alpha)
+
+		self.display_surface.blit(text_surface,text_rect)
+		self.clock.tick(30)
+	
 	#type of ending
 	def ending(self,type_ending) :
 		ending_font = pygame.font.Font("graphics/font/turok.ttf",100)
 		ending_sub_font = pygame.font.Font("graphics/font/turok.ttf",50)
 		point_font = pygame.font.Font("graphics/font/turok.ttf",30)
+		# lose ending
 		if type_ending == "lose" :
-			if self.player.lose == False :
-				self.die.play()
-				self.main_sound.stop()
-				self.lose_sound.play()
+			# if self.player.lose == False :
+			# 	self.die.play()
+			# 	self.main_sound.stop()
+			# 	self.lose_sound.play()
 			self.player.lose = True
 			self.display_surface.fill((0,0,0))
 			ending_surf = ending_font.render(str("YOU LOSE"),True,'RED')
-			self.display_surface.blit(LOSE_BG,(-200,-100))
-			self.display_surface.blit(ending_surf,(530,290))
+			self.display_surface.blit(LOSE_BG,(-10,-100))
+			self.display_surface.blit(ending_surf,(510,290))
+			self.draw_changing_text(point_font,"PRESS SPACE TO PLAY AGAIN !",(530,690),(255, 255, 255))
+		# win ending
 		if type_ending == "win" :
 			if self.player.win == False :
+				self.win.play()
 				self.main_sound.stop()
 				self.win_sound.play()
 			self.player.win = True
@@ -137,10 +157,12 @@ class Level:
 			sub_surf = ending_sub_font.render(str("Congratulations"),True,'LIGHT CORAL')
 			point_surf = point_font.render("Your FINAL Point : " + str(self.point),True,'tomato')
 			self.display_surface.blit(WIN_BG,(0,-400))
-			self.display_surface.blit(ending_surf,(300,250))
+			self.display_surface.blit(ending_surf,(300,275))
 			self.display_surface.blit(sub_surf,(300,200))
-			self.display_surface.blit(point_surf,(320,375))
+			self.display_surface.blit(point_surf,(320,420))
 			self.display_surface.blit(VICTORY,(920,0))
+			self.draw_changing_text(point_font,"IF YOU WANT PLAY AGAIN, PRESS SPACE :3",(200,500),(0,0,0))
+
 	#checking and remove kunai from group sprites
 	def check_took_kunai(self):
 		if self.layouts is None :
@@ -153,7 +175,7 @@ class Level:
 					if self.layouts[row_index][col_index] != '-1':
 						if(self.layouts[row_index][col_index]) == '0' :
 							# increase point for character
-							self.sound_point.play()
+							# self.sound_point.play()
 							self.point += 1000
 						if(self.layouts[row_index][col_index]) == '1' :
 							if(self.player.speed)>= PLAYERSPEED//2:
@@ -168,12 +190,12 @@ class Level:
 								# if(self.player.status == "down") :
 								# 	self.player.hitbox.y -= 1.5*self.player.speed
 
-								self.boom.play()
+								# self.boom.play()
 								self.player.speed -= 1
 								self.count_time_speed_restore = 0
 						if(self.layouts[row_index][col_index]) == '2' :
 							if(self.player.speed) <= PLAYERSPEED*2:
-								self.food.play()
+								# self.food.play()
 								self.player.speed += (int)(PLAYERSPEED*0.3)
 								self.count_time_speed_restore = 0
 						self.layouts[row_index][col_index] = '-1'
@@ -195,7 +217,7 @@ class Level:
 		#AI find path
 		find_shortest_path(self.sasuke,(int (self.sasuke.hitbox.x / 64), int (self.sasuke.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)), BFS)	
 		find_shortest_path(self.minato,(int (self.minato.hitbox.x / 64), int (self.minato.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)), DFS)	
-		find_shortest_path(self.naruto,(int (self.naruto.hitbox.x / 64), int (self.naruto.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)), IDS)	
+		find_shortest_path(self.naruto,(int (self.naruto.hitbox.x / 64), int (self.naruto.hitbox.y / 64)), (int (self.player.hitbox.x / 64), int (self.player.hitbox.y / 64)), ASTAR)	
   		# update and draw the game
 		self.visible_sprites.custom_draw(self.player)
 		self.visible_sprites.update()
@@ -204,6 +226,7 @@ class Level:
 		check_enemy_searh_time(self.sasuke.execution_time,330,1220)
 		check_enemy_searh_time(self.minato.execution_time,430,1220)
 		check_enemy_searh_time(self.naruto.execution_time,530,1220)
+		# check_enemy_searh_time(self.naruto.execution_time,630,1220)
 		#player_mode
 		check_mode(self.player.player_mode,690,1230)
 		#ending

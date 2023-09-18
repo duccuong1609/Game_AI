@@ -17,13 +17,34 @@ class Game:
 	def run(self):
 		while True:
 			for event in pygame.event.get():
+				#out game mouse
 				if event.type == pygame.QUIT:
 					pygame.quit()
 					sys.exit()
+			#reset game
+			if(game.level.player.win or game.level.player.lose) and game.level.player.accept_reset:
+					#stop lose game sound
+					# if(game.level.player.lose == True) :
+					# 	self.level.lose_sound.stop()
+					# #stop win game sound
+					# if(game.level.player.win == True) :
+					# 	self.level.win_sound.stop()
+					# #cook player
+					# self.level.player = ()
+					#cook level
+					self.level = ()
+					#init again
+					self.level = Level()
+			#out game keyboard
+			if game.level.player.out_game == True:
+				pygame.quit()
+				sys.exit()
+			#run game
 			self.screen.fill('black')
 			self.level.run()
 			pygame.display.update()
 			self.clock.tick(FPS)
+
 if __name__ == '__main__':
 	game = Game()
 	game.run()
