@@ -29,12 +29,12 @@ WIN_BG = pygame.image.load("graphics/menu/bg.jpg")
 LOSE_BG = pygame.image.load("graphics/menu/lose_BG.jpg")
 GAME_ICON = pygame.image.load("graphics/menu/icon.png")
 
-# BG_VOLUME = 0.1
-# EFFECT_VOLUME = 0.3
-# DEBUFF_VOLUME = 0.5
+BG_VOLUME = 0.1
+EFFECT_VOLUME = 0.3
+DEBUFF_VOLUME = 0.5
 
 #MUTE
-BG_VOLUME = 0
-EFFECT_VOLUME = 0
-DEBUFF_VOLUME = 0
+# BG_VOLUME = 0
+# EFFECT_VOLUME = 0
+# DEBUFF_VOLUME = 0
 
