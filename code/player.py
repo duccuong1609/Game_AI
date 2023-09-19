@@ -7,7 +7,7 @@ class Player(pygame.sprite.Sprite):
 		super().__init__(groups)
 		self.image = pygame.image.load('graphics/test/player.png').convert_alpha()
 		self.rect = self.image.get_rect(topleft = pos)
-		self.hitbox = self.rect.inflate(0, 0)
+		self.hitbox = self.rect.inflate(0, -26)
 		# graphics setup
 		self.import_player_assets()
 		self.status = 'down'

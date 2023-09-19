@@ -82,7 +82,7 @@ class Level:
 		#spawn player // bot
 		self.player = Player((2112, 3648),[self.visible_sprites],self.obstacle_sprites)
 		self.tsunade = Enemy((768, 1920),[self.visible_sprites],self.obstacle_sprites,TSUNADE)
-		self.minato = Enemy((2656, 1742),[self.visible_sprites],self.obstacle_sprites,MINATO)
+		self.minato = Enemy((2688, 2560),[self.visible_sprites],self.obstacle_sprites,MINATO)
 		self.kakashi = Enemy((2048, 2112),[self.visible_sprites],self.obstacle_sprites,KAKASHI)
 		self.tobirama = Enemy((256, 2496),[self.visible_sprites],self.obstacle_sprites,TOBIRAMA)
 
@@ -218,7 +218,15 @@ class Level:
 									self.sprites_object_list.remove(self.sprites_object_list[id])
 									for i in range((id),len(self.sprites_object_list)):
 										self.sprites_object_list[i].id -= 1
-
+	#never when in immortal mode
+	def neverlose(self) :
+		if(self.player.player_mode == "IMMORTAL MODE") :
+			self.tsunade.catched = False
+			self.minato.catched = False
+			self.kakashi.catched = False
+			self.tobirama.catched = False
+ 
+ 
 	def run(self):
 		# -1 POINT every milisecond while POINT > 0
 		if self.player.win != True :
@@ -246,6 +254,8 @@ class Level:
 		self.check_took_kunai()
 		#restore speed for player
 		self.restore_speed()
+		#never lose when immortal mode
+		self.neverlose()
   
 class YSortCameraGroup(pygame.sprite.Group):
 	def __init__(self):
