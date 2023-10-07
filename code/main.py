@@ -6,7 +6,7 @@ class Game:
 	def __init__(self):
 
 		# general setup
-		pygame.init()
+		pygame.init()	
 		self.screen = pygame.display.set_mode((WIDTH,HEIGHT))
 		pygame.display.set_icon(GAME_ICON)
 		pygame.display.set_caption('Naruto')

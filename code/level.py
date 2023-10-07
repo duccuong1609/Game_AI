@@ -9,6 +9,7 @@ from debug import check_point
 from debug import check_mode
 from support import *
 from enemies import find_shortest_path
+from behavior import *
 
 class Level:
 	end = False
@@ -50,6 +51,8 @@ class Level:
 		self.alpha_speed = 5  # Speed of alpha value change
 		self.alpha = 0  # Initial alpha value
 		self.clock = pygame.time.Clock() #clock changing text
+		# self.player_level = 0
+		self.behavior = behavior(self.obstacle_sprites)
 
 	def create_map(self):
 
@@ -127,6 +130,7 @@ class Level:
 				self.ending("lose")
 		if (self.point >= 160000 and self.player.player_mode == "PLAYING MODE" and  (2048 <= self.player.hitbox.x <= 2176) and (3584 <= self.player.hitbox.y <= 3712)) or self.player.win == True :
 			self.ending("win")
+			
 	#draw a changing alpha text
 	def draw_changing_text(self,font,text,text_rect,color) :
 		self.alpha += self.alpha_speed
@@ -240,14 +244,16 @@ class Level:
   		# update and draw the game
 		self.visible_sprites.custom_draw(self.player)
 		self.visible_sprites.update()
-		#check my point
-		check_point(self.point,230,1220)
-		check_enemy_searh_time(self.tsunade.execution_time,330,1220)
-		check_enemy_searh_time(self.minato.execution_time,430,1220)
-		check_enemy_searh_time(self.kakashi.execution_time,530,1220)
-		check_enemy_searh_time(self.tobirama.execution_time,630,1220)
-		#player_mode
+		#check point / time search / status
+		
+		# check_point(self.point,230,1220)
+		# check_enemy_searh_time(self.tsunade.execution_time,330,1220)
+		# check_enemy_searh_time(self.minato.execution_time,430,1220)
+		# check_enemy_searh_time(self.kakashi.execution_time,530,1220)
+		# check_enemy_searh_time(self.tobirama.execution_time,630,1220)
+		
 		check_mode(self.player.player_mode,690,1230)
+		
 		#ending
 		self.when_game_ending()
 		#check and loot item
@@ -256,6 +262,15 @@ class Level:
 		self.restore_speed()
 		#never lose when immortal mode
 		self.neverlose()
+		#behavior
+		self.behavior.bounce_back(self.player,self.tsunade)
+		self.behavior.bounce_back(self.player,self.kakashi)
+		self.behavior.bounce_back(self.player,self.minato)
+		self.behavior.bounce_back(self.player,self.tobirama)
+  
+		
+		#debug
+		debug(self.obstacle_sprites)
   
 class YSortCameraGroup(pygame.sprite.Group):
 	def __init__(self):
@@ -267,7 +282,8 @@ class YSortCameraGroup(pygame.sprite.Group):
 		super().__init__()
 		self.display_surface = pygame.display.get_surface()
 		#menu surface
-		self.menu_surface = pygame.Surface((350, HEIGHT))
+  
+		self.menu_surface = pygame.Surface((MENU_WIDTH, HEIGHT))
 		self.menu_surface.blit(MENU_BACKGROUND,(0,0))
 		self.draw_text("properties",self.menu_font,(255,255,255),80,20)
 		self.draw_text("key instruction",self.label_font,(255,255,255),50,90)
@@ -279,8 +295,9 @@ class YSortCameraGroup(pygame.sprite.Group):
 		self.draw_text("Time search ENEMY USING DFS",self.label_font,(255,255,255),50,390)
 		self.draw_text("Time search ENEMY USING IDS",self.label_font,(255,255,255),50,490)
 		self.draw_text("Time search ENEMY USING A*",self.label_font,(255,255,255),50,590)
+
 		#get size
-		self.half_width = (self.display_surface.get_size()[0] - 350) // 2
+		self.half_width = (self.display_surface.get_size()[0] - MENU_WIDTH) // 2
 		self.half_height = self.display_surface.get_size()[1] // 2
 		self.offset = pygame.math.Vector2()
 		#zoom
@@ -325,11 +342,11 @@ class YSortCameraGroup(pygame.sprite.Group):
 		
 		self.display_surface.blit(scaled_surf,scaled_rect)
 		#display menu
-		# self.menu_surface.fill((255,255,255))
-		self.display_surface.blit(self.menu_surface,(1170,0))
+
+		# self.display_surface.blit(self.menu_surface,(1170,0))
 
 		self.zoom_keyboard_control()
-		if(self.zoom_scale <=0.44):
+		if(self.zoom_scale <=0.53):
 			self.zoom_scale += 0.01
 	#draw text for menu
 	def draw_text(self,text, font, text_col, x, y):

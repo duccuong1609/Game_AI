@@ -313,7 +313,7 @@ def aStar(self, start, end):
 					new_i, new_j = i + dx, j + dy
 					if new_i in range(self.cols) and new_j in range(self.rows) and self.maze[new_j][new_i] == '-1':
 						childNode = (new_i, new_j)
-						# Chi phí của ô hiện tại (kiểu như là các con ô hiện tại)
+						# sô ô đã đi
 						temp_g_score = g_score[curr] + 1
 						# Tổng khoảng cách đã đi và chưa đi
 						temp_f_score = temp_g_score + heuristic(childNode,end)
