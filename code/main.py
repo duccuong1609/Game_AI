@@ -28,7 +28,7 @@ class Game:
 					#stop win game sound
 					if(game.level.player.win == True) :
 						self.level.win_sound.stop()
-					#cook level
+					#cook level	
 					self.level = ()
 					#init again
 					self.level = Level()

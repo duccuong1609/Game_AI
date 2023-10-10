@@ -263,10 +263,11 @@ class Level:
 		#never lose when immortal mode
 		self.neverlose()
 		#behavior
-		self.behavior.bounce_back(self.player,self.tsunade)
-		self.behavior.bounce_back(self.player,self.kakashi)
-		self.behavior.bounce_back(self.player,self.minato)
-		self.behavior.bounce_back(self.player,self.tobirama)
+		if self.player.attacking == True :
+			self.behavior.bounce_back(self.player,self.tsunade)
+			self.behavior.bounce_back(self.player,self.kakashi)
+			self.behavior.bounce_back(self.player,self.minato)
+			self.behavior.bounce_back(self.player,self.tobirama)
   
 		
 		#debug
