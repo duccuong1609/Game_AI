@@ -53,6 +53,11 @@ class Level:
 		self.clock = pygame.time.Clock() #clock changing text
 		# self.player_level = 0
 		self.behavior = behavior(self.obstacle_sprites)
+		#heart
+		self.heart = MAX_HEART - 2
+		#catched time
+		self.sec_catch = None
+		self.cooldown = False
 
 	def create_map(self):
 
@@ -113,8 +118,36 @@ class Level:
 	
 	#catched range
 	def check_catched(self,enemy) :
-		if (enemy.hitbox.x - 12 <= self.player.hitbox.x <= enemy.hitbox.x + 12) and (enemy.hitbox.y - 16 <= self.player.hitbox.y <= enemy.hitbox.y + 16) :
+		if (enemy.hitbox.x <= self.player.hitbox.x <= enemy.hitbox.x) and (enemy.hitbox.y<= self.player.hitbox.y <= enemy.hitbox.y) :
 			enemy.catched = True
+		if(self.player.win == True or self.player.lose == True) :
+			return
+		self.heart_bar(enemy)
+	
+	def heart_bar(self,enemy) :
+		if(enemy.catched == True) :
+			if(self.cooldown == False) :
+				self.sec_catch = pygame.time.get_ticks()
+			self.cooldown = True
+			self.on_cooldown()
+			if(self.heart >=-1):
+				if(self.cooldown == False) and self.heart < MAX_HEART - 2:
+					self.die.play()
+					self.heart -=1
+				if(self.heart == MAX_HEART -2) :
+					self.die.play()
+					self.heart -=1
+			
+	def on_cooldown(self) :
+		if(self.sec_catch != None) and self.cooldown == True:
+			if(self.heart > -1) :
+				self.tsunade.catched = False
+				self.minato.catched = False
+				self.kakashi.catched = False
+				self.tobirama.catched = False
+			if pygame.time.get_ticks() - self.sec_catch >= 200*COOLDOWN_CATCH :
+				self.cooldown = False
+			
 	#checking and doing ending
 	def when_game_ending(self):
 		if self.player.win == False:
@@ -123,10 +156,10 @@ class Level:
 			self.check_catched(self.kakashi)
 			self.check_catched(self.minato)
 			self.check_catched(self.tobirama)
-
-			if (self.tsunade.catched or self.kakashi.catched) and self.player.player_mode == "PLAYING MODE":
+   
+			if (self.tsunade.catched or self.kakashi.catched) and self.player.player_mode == "PLAYING MODE" and self.heart < -1 :
 				self.ending("lose")
-			if (self.minato.catched or self.tobirama.catched) and self.player.player_mode == "PLAYING MODE":
+			if (self.minato.catched or self.tobirama.catched) and self.player.player_mode == "PLAYING MODE" and self.heart < -1 :
 				self.ending("lose")
 		if (self.point >= 160000 and self.player.player_mode == "PLAYING MODE" and  (2048 <= self.player.hitbox.x <= 2176) and (3584 <= self.player.hitbox.y <= 3712)) or self.player.win == True :
 			self.ending("win")
@@ -150,7 +183,6 @@ class Level:
 		# lose ending
 		if type_ending == "lose" :
 			if self.player.lose == False :
-				self.die.play()
 				self.main_sound.stop()
 				self.lose_sound.play()
 			self.player.lose = True
@@ -268,10 +300,13 @@ class Level:
 			self.behavior.bounce_back(self.player,self.kakashi)
 			self.behavior.bounce_back(self.player,self.minato)
 			self.behavior.bounce_back(self.player,self.tobirama)
-  
-		
+		#draw heart
+		if self.heart >= -1 :
+			self.behavior.draw_heart(self.heart+1,self.player)
+		else :
+			self.behavior.draw_heart(0,self.player)
 		#debug
-		debug(self.obstacle_sprites)
+		# debug(self.obstacle_sprites)
   
 class YSortCameraGroup(pygame.sprite.Group):
 	def __init__(self):

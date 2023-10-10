@@ -3,6 +3,8 @@ from enemies import Enemy
 from settings import *
 import pygame
 from support import *
+from support import import_folder
+import time
 
 class behavior :
     def __init__(self,obstacle_sprites) :
@@ -10,6 +12,10 @@ class behavior :
         self.distance_tile = TILESIZE/2
         self.obstacle_sprites = obstacle_sprites
         self.maze = import_csv_layout('map/map_FloorBlocks.csv')
+        self.display_surface = pygame.display.get_surface()
+        heart_path = 'graphics/hearts/'
+        self.animations = import_folder(heart_path)
+        
 
     def bounce_back(self,player,enemy) :
             if player.attacking == True :
@@ -30,7 +36,7 @@ class behavior :
                 if(player.status == "left_attack") and (enemy.hitbox.x < player.hitbox.x and player.hitbox.x - enemy.hitbox.x <64) and height_condition:
                     self.bounce_point = self.limit_bounce_point(player,enemy)
                     enemy.hitbox.x = enemy.hitbox.x - self.bounce_point*self.distance_tile
-    
+
     def limit_bounce_point(self,player,enemy) :
         x_point = round(enemy.hitbox.x/64)
         y_point = round(enemy.hitbox.y/64)
@@ -62,3 +68,8 @@ class behavior :
                     return bounce - 1
                 bounce += 1
             return bounce - 1 
+        
+    def draw_heart(self,heart,player):
+        if(player.lose == True or player.win == True) :
+            return
+        self.display_surface.blit(self.animations[heart],(10,10))
