@@ -19,7 +19,7 @@ class Player(pygame.sprite.Sprite):
 		self.direction = pygame.math.Vector2()
 		self.speed = PLAYERSPEED * SPEED_UP
 		self.attacking = False
-		self.attack_cooldown = 800
+		self.attack_cooldown = 600
 		self.attack_time = None
 
 		self.obstacle_sprites = obstacle_sprites
@@ -31,6 +31,8 @@ class Player(pygame.sprite.Sprite):
 		self.accept_reset = False
 		#out game
 		self.out_game = False
+		#cant attack
+		self.cant_attack = False
 
 	def import_player_assets(self):
 		character_path = 'graphics/player/'
@@ -74,7 +76,7 @@ class Player(pygame.sprite.Sprite):
 			if keys[pygame.K_ESCAPE] :
 				self.out_game = True
 			# attack input 
-			if keys[pygame.K_f]:
+			if keys[pygame.K_f] and self.cant_attack == False:
 				if self.attacking == False :
 					self.frame_index = 0
 				self.attacking = True
