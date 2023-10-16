@@ -10,6 +10,7 @@ from debug import check_mode
 from support import *
 from enemies import find_shortest_path
 from behavior import *
+from effect import *
 
 class Level:
 	end = False
@@ -40,6 +41,7 @@ class Level:
 		self.boom = pygame.mixer.Sound('audio/boom.mp3')
 		self.die = pygame.mixer.Sound('audio/die.wav')
 		self.win = pygame.mixer.Sound('audio/you_win.mp3')
+		self.heal_pickup = pygame.mixer.Sound('audio/heal_pickup.mp3')
 		self.sound_point.set_volume(EFFECT_VOLUME)
 		self.food.set_volume(EFFECT_VOLUME)
 		self.boom.set_volume(DEBUFF_VOLUME)
@@ -47,6 +49,7 @@ class Level:
 		self.lose_sound.set_volume(BG_VOLUME)
 		self.win_sound.set_volume(BG_VOLUME)
 		self.win.set_volume(EFFECT_VOLUME)
+		self.heal_pickup.set_volume(EFFECT_VOLUME)
 		#text alpha
 		self.alpha_speed = 5  # Speed of alpha value change
 		self.alpha = 0  # Initial alpha value
@@ -90,9 +93,11 @@ class Level:
 		#spawn player // bot
 		self.player = Player((2112, 3648),[self.visible_sprites],self.obstacle_sprites)
 		self.tsunade = Enemy((768, 1920),[self.visible_sprites],self.obstacle_sprites,TSUNADE)
-		self.minato = Enemy((2688, 2560),[self.visible_sprites],self.obstacle_sprites,MINATO)
+		self.minato = Enemy((2688, 2560),[self.visible_sprites],self.obstacle_sprites,PAIN_DEVA)
 		self.kakashi = Enemy((2048, 2112),[self.visible_sprites],self.obstacle_sprites,KAKASHI)
 		self.tobirama = Enemy((256, 2496),[self.visible_sprites],self.obstacle_sprites,TOBIRAMA)
+		#spawn infinity
+		self.shuriken = Shuriken((9999, 9999),[self.visible_sprites],self.obstacle_sprites)
 
 	#finding the sprites index on group sprites (YSortCameraGroup)
 	def find_sprites_index(self,x,y):
@@ -243,6 +248,16 @@ class Level:
 								self.food.play()
 								self.player.speed += (int)(PLAYERSPEED*0.3)
 								self.count_time_speed_restore = 0
+						if(self.layouts[row_index][col_index]) == '3' :
+							if self.heart < (MAX_HEART -2) :
+								self.heart +=1
+							self.heal_pickup.play()
+							self.point += 1000
+						if(self.layouts[row_index][col_index]) == '4' :
+							if self.behavior.mana_count < 6 :
+								self.behavior.mana_count +=1
+							self.heal_pickup.play()	
+							self.point += 1000
 						self.layouts[row_index][col_index] = '-1'
 						id = self.find_sprites_index(x,y)
 						if(id > -1):
@@ -294,11 +309,11 @@ class Level:
 		#never lose when immortal mode
 		self.neverlose()
 		#behavior
-		if self.player.attacking == True :
-			self.behavior.bounce_back(self.player,self.tsunade)
-			self.behavior.bounce_back(self.player,self.kakashi)
-			self.behavior.bounce_back(self.player,self.minato)
-			self.behavior.bounce_back(self.player,self.tobirama)
+		# if self.player.attacking == True :
+		# 	self.behavior.bounce_back(self.player,self.tsunade)
+		# 	self.behavior.bounce_back(self.player,self.kakashi)
+		# 	self.behavior.bounce_back(self.player,self.minato)
+		# 	self.behavior.bounce_back(self.player,self.tobirama)
 		#draw heart
 		if self.heart >= -1 :
 			self.behavior.draw_heart(self.heart+1,self.player)
@@ -309,6 +324,8 @@ class Level:
 		# debug(self.obstacle_sprites)
 		#mana
 		self.behavior.attack_behavior(self.player)
+		#when attack
+		self.shuriken.shuriken_time_attack(self.player)
   
 class YSortCameraGroup(pygame.sprite.Group):
 	def __init__(self):

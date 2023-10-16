@@ -22,6 +22,7 @@ KAKASHI = 4
 SASUKE_2ND = 5
 TSUNADE = 6
 TOBIRAMA = 7
+PAIN_DEVA = 8
 
 MENU_BACKGROUND = pygame.image.load("graphics/menu/menu_background.png")
 VICTORY = pygame.image.load("graphics/menu/victory.png")
@@ -36,7 +37,7 @@ DEBUFF_VOLUME = 0.5
 SPEED_UP = 1
 
 NORMAL_STATUS_SPEED = 0.15
-ATTACK_STATUS_SPEED = 0.3
+ATTACK_STATUS_SPEED = 0.4
 
 # MUTE
 # BG_VOLUME = 0
@@ -45,7 +46,7 @@ ATTACK_STATUS_SPEED = 0.3
 
 MENU_WIDTH = 0
 
-EXPECTED_BOUNCE_POINT = 10
+EXPECTED_BOUNCE_POINT = 5
 
 MAX_HEART = 4
 COOLDOWN_CATCH = 10

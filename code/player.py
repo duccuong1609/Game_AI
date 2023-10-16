@@ -7,7 +7,9 @@ class Player(pygame.sprite.Sprite):
 		super().__init__(groups)
 		self.image = pygame.image.load('graphics/test/player.png').convert_alpha()
 		self.rect = self.image.get_rect(topleft = pos)
-		self.hitbox = self.rect.inflate(0, -26)
+		self.hitbox = self.rect.inflate(0, 0)
+		self.hitbox.height = 64
+		self.hitbox.width = 64
 		# graphics setup
 		self.import_player_assets()
 		self.status = 'down'
@@ -19,7 +21,7 @@ class Player(pygame.sprite.Sprite):
 		self.direction = pygame.math.Vector2()
 		self.speed = PLAYERSPEED * SPEED_UP
 		self.attacking = False
-		self.attack_cooldown = 600
+		self.attack_cooldown = 2000
 		self.attack_time = None
 
 		self.obstacle_sprites = obstacle_sprites
@@ -33,6 +35,8 @@ class Player(pygame.sprite.Sprite):
 		self.out_game = False
 		#cant attack
 		self.cant_attack = False
+		#finish attack
+		self.finish_attack = True
 
 	def import_player_assets(self):
 		character_path = 'graphics/player/'
@@ -76,11 +80,13 @@ class Player(pygame.sprite.Sprite):
 			if keys[pygame.K_ESCAPE] :
 				self.out_game = True
 			# attack input 
-			if keys[pygame.K_f] and self.cant_attack == False:
+			if keys[pygame.K_f] and self.cant_attack == False and self.finish_attack == True:
+				self.finish_attack = False
 				if self.attacking == False :
 					self.frame_index = 0
 				self.attacking = True
 				self.attack_time = pygame.time.get_ticks()
+				
 			# magic input 
 			# if keys[pygame.K_LCTRL]:
 			# 	self.attacking = True

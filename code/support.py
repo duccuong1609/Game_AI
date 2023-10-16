@@ -26,7 +26,7 @@ def import_folder(path):
 #choose the enemy
 def choose_enemy(num) :
     switcher = {
-		0: 'graphics/player/',
+		0: 'graphics/enemy/minato/',
 		1: 'graphics/enemy/sasuke/',
 		2: 'graphics/enemy/naruto/',
 		3: 'graphics/enemy/obito/',
@@ -34,5 +34,6 @@ def choose_enemy(num) :
 		5: 'graphics/enemy/sasuke_2nd/',
 		6: 'graphics/enemy/tsunade/',
 		7: 'graphics/enemy/tobirama/',
+		8: 'graphics/enemy/Akatsuki/Pain_Deva/',
 	}
     return switcher.get(num,0)
