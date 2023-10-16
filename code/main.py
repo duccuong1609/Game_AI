@@ -11,7 +11,7 @@ class Game:
 		pygame.display.set_icon(GAME_ICON)
 		pygame.display.set_caption('Naruto')
 		self.clock = pygame.time.Clock()
-		#create level
+		#create levela
 		self.level = Level()
 	def run(self):
 		while True:

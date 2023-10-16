@@ -8,7 +8,7 @@ class Shuriken(pygame.sprite.Sprite):
         super().__init__(groups)
         self.image = pygame.image.load('graphics/effect/shuriken/0.png').convert_alpha()
         self.rect = self.image.get_rect(topleft = pos)
-        self.hitbox = self.rect.inflate(0, 20)
+        self.hitbox = self.rect.inflate(0, 0)
         self.hitbox.height = 60
         self.hitbox.width = 60
         # graphics setup
@@ -163,6 +163,7 @@ class Shuriken(pygame.sprite.Sprite):
         if player.status == "left_attack" :
             self.attack_direction = "left"
             self.quarter = "honrizontal"
+            self.y_start = self.y_start + 32
             for i in range(0,EXPECTED_BOUNCE_POINT) :
                 if self.maze[y_point][x_point-i] == "999" :
                     self.y_limit = y_point*64
@@ -175,6 +176,7 @@ class Shuriken(pygame.sprite.Sprite):
         if player.status == "right_attack" :
             self.attack_direction = "right"
             self.quarter = "honrizontal"
+            self.y_start = self.y_start + 32
             for i in range(0,EXPECTED_BOUNCE_POINT) :
                 if self.maze[y_point][x_point+i] == "999" :
                     self.y_limit = y_point*64
@@ -213,7 +215,7 @@ class Shuriken(pygame.sprite.Sprite):
                     self.count += 2
                 self.collision('horizontal')
                 self.rect.center = self.hitbox.center
-                self.rect.centery = self.hitbox.centery + 20
+                self.rect.centery = self.hitbox.centery
             
             if self.attack_direction == 'right' :
                 self.rect.centery = self.y_start
@@ -223,7 +225,7 @@ class Shuriken(pygame.sprite.Sprite):
                     self.count += 2
                 self.collision('horizontal')
                 self.rect.center = self.hitbox.center
-                self.rect.centery = self.hitbox.centery + 20
+                self.rect.centery = self.hitbox.centery
             
             if(self.count > self.step) :
                 self.is_visible = False

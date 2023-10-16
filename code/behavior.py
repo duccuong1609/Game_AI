@@ -21,57 +21,24 @@ class behavior(pygame.sprite.Sprite) :
         self.degree_mana = False
         self.time_restore = 0
 
-    # def bounce_back(self,player,enemy) :
-    #         if player.attacking == True :
-    #             #condition while attack Y
-    #             witdh_condition = (player.hitbox.x -64 < enemy.hitbox.x < player.hitbox.x + 64)
-    #             #condition while attack X
-    #             height_condition = (player.hitbox.y -32 < enemy.hitbox.y < player.hitbox.y + 32)
-                
-    #             if(player.status == "up_attack") and (player.hitbox.y > enemy.hitbox.y and player.hitbox.y - enemy.hitbox.y < 64) and witdh_condition:
-    #                 self.bounce_point = self.limit_bounce_point(player,enemy)
-    #                 enemy.hitbox.y = enemy.hitbox.y - self.bounce_point*self.distance_tile
-    #             if(player.status == "down_attack") and (player.hitbox.y < enemy.hitbox.y and enemy.hitbox.y - player.hitbox.y <64) and witdh_condition :
-    #                 self.bounce_point = self.limit_bounce_point(player,enemy)
-    #                 enemy.hitbox.y = enemy.hitbox.y + self.bounce_point*self.distance_tile
-    #             if(player.status == "right_attack") and  (player.hitbox.x < enemy.hitbox.x and enemy.hitbox.x - player.hitbox.x <64) and height_condition:
-    #                 self.bounce_point = self.limit_bounce_point(player,enemy)
-    #                 enemy.hitbox.x = enemy.hitbox.x + self.bounce_point*self.distance_tile
-    #             if(player.status == "left_attack") and (enemy.hitbox.x < player.hitbox.x and player.hitbox.x - enemy.hitbox.x <64) and height_condition:
-    #                 self.bounce_point = self.limit_bounce_point(player,enemy)
-    #                 enemy.hitbox.x = enemy.hitbox.x - self.bounce_point*self.distance_tile
-
-    # def limit_bounce_point(self,player,enemy) :
-    #     x_point = round(enemy.hitbox.x/64)
-    #     y_point = round(enemy.hitbox.y/64)
-    #     bounce = 0
-    #     if player.status == "up_attack" :
-    #         for i in range(0,EXPECTED_BOUNCE_POINT) :
-    #             if self.maze[y_point-i][x_point] == "999" :
-    #                 return bounce - 1
-    #             bounce += 1
-    #             # print("maze["+ str(y_point-i)+"," + str(x_point)+"] = " + self.maze[y_point-i][x_point])
-    #             # print('point = '+ str(bounce))
-    #         return bounce - 1
-    #     if player.status == "down_attack" :
-    #         for i in range(0,EXPECTED_BOUNCE_POINT) :
-    #             if self.maze[y_point+i][x_point] == "999" :
-    #                 return bounce - 1
-    #             bounce += 1
-    #         return bounce - 1
-    #     if player.status == "left_attack" :
-    #         for i in range(0,EXPECTED_BOUNCE_POINT) :
-    #             if self.maze[y_point][x_point-i] == "999" :
-    #                 return bounce - 1
-    #             bounce += 1
-    #         return bounce - 1    
-    #     if player.status == "right_attack" :
-            
-    #         for i in range(0,EXPECTED_BOUNCE_POINT) :
-    #             if self.maze[y_point][x_point+i] == "999" :
-    #                 return bounce - 1
-    #             bounce += 1
-    #         return bounce - 1
+    def absorb(self,enemy,shuriken) :
+        if shuriken.hitbox.x < 9999 and shuriken.hitbox.y < 9999 :
+            if shuriken.attack_direction == "up" :
+                if( shuriken.hitbox.x - TILESIZE*1.5 < enemy.hitbox.x < shuriken.hitbox.x + TILESIZE*1.5) and (enemy.hitbox.y < shuriken.hitbox.y or enemy.hitbox.y - shuriken.hitbox.y <=TILESIZE*1.1) and (shuriken.hitbox.y - enemy.hitbox.y <= TILESIZE) :
+                    enemy.hitbox.x = shuriken.hitbox.x
+                    enemy.hitbox.y = shuriken.hitbox.y + TILESIZE/PLAYERSPEED
+            if shuriken.attack_direction == "down" :
+                if( shuriken.hitbox.x - TILESIZE*1.5 < enemy.hitbox.x < shuriken.hitbox.x + TILESIZE*1.5) and (shuriken.hitbox.y < enemy.hitbox.y or shuriken.hitbox.y - enemy.hitbox.y <=TILESIZE*1.1) and (enemy.hitbox.y - shuriken.hitbox.y <= TILESIZE) :
+                    enemy.hitbox.x = shuriken.hitbox.x
+                    enemy.hitbox.y = shuriken.hitbox.y - TILESIZE/PLAYERSPEED
+            if shuriken.attack_direction == "left" :
+                if( shuriken.hitbox.y - TILESIZE*1.5 <enemy.hitbox.y < shuriken.hitbox.y + TILESIZE*1.5) and (enemy.hitbox.x < shuriken.hitbox.x or enemy.hitbox.x - shuriken.hitbox.x <= TILESIZE*1.5) and (shuriken.hitbox.x - enemy.hitbox.x <= TILESIZE):
+                    enemy.hitbox.x = shuriken.hitbox.x + TILESIZE/PLAYERSPEED
+                    enemy.hitbox.y = shuriken.hitbox.y
+            if shuriken.attack_direction == "right" :
+                if( shuriken.hitbox.y - TILESIZE*1.5 <enemy.hitbox.y < shuriken.hitbox.y + TILESIZE*1.5) and (shuriken.hitbox.x < enemy.hitbox.x or shuriken.hitbox.x - enemy.hitbox.x <= TILESIZE*1.5) and (enemy.hitbox.x - shuriken.hitbox.x <= TILESIZE):
+                    enemy.hitbox.x = shuriken.hitbox.x - TILESIZE/PLAYERSPEED
+                    enemy.hitbox.y = shuriken.hitbox.y
         
     def draw_heart(self,heart,player):
         if(player.lose == True or player.win == True) :
@@ -109,7 +76,7 @@ class behavior(pygame.sprite.Sprite) :
         
         if(self.mana_count < 6) :
             self.time_restore+=1
-            if(self.time_restore > 100) :
+            if(self.time_restore > MANA_RESTORE_TIME) :
                 self.mana_count +=1
                 self.time_restore=0
      

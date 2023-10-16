@@ -309,11 +309,10 @@ class Level:
 		#never lose when immortal mode
 		self.neverlose()
 		#behavior
-		# if self.player.attacking == True :
-		# 	self.behavior.bounce_back(self.player,self.tsunade)
-		# 	self.behavior.bounce_back(self.player,self.kakashi)
-		# 	self.behavior.bounce_back(self.player,self.minato)
-		# 	self.behavior.bounce_back(self.player,self.tobirama)
+		self.behavior.absorb(self.tsunade,self.shuriken)
+		self.behavior.absorb(self.kakashi,self.shuriken)
+		self.behavior.absorb(self.minato,self.shuriken)
+		self.behavior.absorb(self.tobirama,self.shuriken)
 		#draw heart
 		if self.heart >= -1 :
 			self.behavior.draw_heart(self.heart+1,self.player)
