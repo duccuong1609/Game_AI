@@ -79,7 +79,7 @@ class Player(pygame.sprite.Sprite):
 				self.accept_reset = True
 			if keys[pygame.K_ESCAPE] :
 				self.out_game = True
-			# attack input 
+			# attack input
 			if keys[pygame.K_f] and self.cant_attack == False and self.finish_attack == True:
 				self.finish_attack = False
 				if self.attacking == False :

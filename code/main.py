@@ -11,7 +11,7 @@ class Game:
 		pygame.display.set_icon(GAME_ICON)
 		pygame.display.set_caption('Naruto')
 		self.clock = pygame.time.Clock()
-		#create levela
+		#create level
 		self.level = Level()
 	def run(self):
 		while True:
@@ -20,7 +20,7 @@ class Game:
 				if event.type == pygame.QUIT:
 					pygame.quit()
 					sys.exit()
-			#reset game
+			#resete game
 			if game.level.player.accept_reset:
 					#stop lose game sound
 					if(game.level.player.lose == True) :
@@ -45,3 +45,4 @@ class Game:
 if __name__ == '__main__':
 	game = Game()
 	game.run()
+ 

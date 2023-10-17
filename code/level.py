@@ -309,10 +309,15 @@ class Level:
 		#never lose when immortal mode
 		self.neverlose()
 		#behavior
+
 		self.behavior.absorb(self.tsunade,self.shuriken)
+  
 		self.behavior.absorb(self.kakashi,self.shuriken)
+  
 		self.behavior.absorb(self.minato,self.shuriken)
+  
 		self.behavior.absorb(self.tobirama,self.shuriken)
+  
 		#draw heart
 		if self.heart >= -1 :
 			self.behavior.draw_heart(self.heart+1,self.player)
@@ -325,6 +330,12 @@ class Level:
 		self.behavior.attack_behavior(self.player)
 		#when attack
 		self.shuriken.shuriken_time_attack(self.player)
+  
+		# if self.minato.been_killed == True :
+		# 	self.minato.been_killed = False
+		# 	self.minato.enemy_hp = ENEMY_HP
+		# 	self.minato.hitbox.x = 2112
+		# 	self.minato.hitbox.y = 3648
   
 class YSortCameraGroup(pygame.sprite.Group):
 	def __init__(self):

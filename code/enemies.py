@@ -42,6 +42,10 @@ class Enemy(pygame.sprite.Sprite):
 		#catched status
 		self.catched = False
 		# self.paths_dir = []
+		#enemy been attacked
+		self.been_catched = False
+		self.enemy_hp = ENEMY_HP
+		self.been_killed = False
 
 	#import skin enemy
 	def import_Enemy_assets(self,num):
@@ -136,21 +140,22 @@ class Enemy(pygame.sprite.Sprite):
 		self.animate()
 #shortest path for enenmy
 def find_shortest_path(self, start, end, algorithm):
-	if start == end:
-		self.paths.clear()
-		self.visited.clear()
-		self.point.clear()
-		self.point.append((0, 0))
-		self.catched = True
-	match algorithm:
-		case 0:
-			bfs(self,start, end)
-		case 1:
-			dfs(self, start, end)
-		case 2:
-			ids(self, start, end)
-		case 3:
-			aStar(self, start, end)
+	if self.hitbox.x < 5000 and self.hitbox.y < 5000 :
+		if start == end:
+			self.paths.clear()
+			self.visited.clear()
+			self.point.clear()
+			self.point.append((0, 0))
+			self.catched = True
+		match algorithm:
+			case 0:
+				bfs(self,start, end)
+			case 1:
+				dfs(self, start, end)
+			case 2:
+				ids(self, start, end)
+			case 3:
+				aStar(self, start, end)
 			
 			
 #bfs algorithm
