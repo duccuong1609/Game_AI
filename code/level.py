@@ -55,7 +55,7 @@ class Level:
 		self.alpha = 0  # Initial alpha value
 		self.clock = pygame.time.Clock() #clock changing text
 		# self.player_level = 0
-		self.behavior = behavior(self.obstacle_sprites)
+		self.behavior = Attack_Behavior(self.obstacle_sprites)
 		#heart
 		self.heart = MAX_HEART - 2
 		#catched time
@@ -123,7 +123,7 @@ class Level:
 	
 	#catched range
 	def check_catched(self,enemy) :
-		if (enemy.hitbox.x <= self.player.hitbox.x <= enemy.hitbox.x) and (enemy.hitbox.y<= self.player.hitbox.y <= enemy.hitbox.y) :
+		if (enemy.hitbox.x <= self.player.hitbox.x <= enemy.hitbox.x) and (enemy.hitbox.y<= self.player.hitbox.y <= enemy.hitbox.y) and enemy.status !='spawn':
 			enemy.catched = True
 		if(self.player.win == True or self.player.lose == True) :
 			return
@@ -229,17 +229,6 @@ class Level:
 							self.point += 1000
 						if(self.layouts[row_index][col_index]) == '1' :
 							if(self.player.speed)>= PLAYERSPEED//2:
-								
-								# hitting by boom <-1 uy tin>
-								# if(self.player.status == "left") :
-								# 	self.player.hitbox.x += 1.5*self.player.speed
-								# if(self.player.status == "right") :
-								# 	self.player.hitbox.x -= 1.5*self.player.speed
-								# if(self.player.status == "up") :
-								# 	self.player.hitbox.y += 1.5*self.player.speed
-								# if(self.player.status == "down") :
-								# 	self.player.hitbox.y -= 1.5*self.player.speed
-
 								self.boom.play()
 								self.player.speed -= 1
 								self.count_time_speed_restore = 0
@@ -309,7 +298,7 @@ class Level:
 		#never lose when immortal mode
 		self.neverlose()
 		#behavior
-
+		##absorb enemy
 		self.behavior.absorb(self.tsunade,self.shuriken)
   
 		self.behavior.absorb(self.kakashi,self.shuriken)
@@ -317,6 +306,11 @@ class Level:
 		self.behavior.absorb(self.minato,self.shuriken)
   
 		self.behavior.absorb(self.tobirama,self.shuriken)
+		##respawn
+		self.minato.enemy_respawn.respawn_enemy(self.minato)
+		self.kakashi.enemy_respawn.respawn_enemy(self.kakashi)
+		self.tsunade.enemy_respawn.respawn_enemy(self.tsunade)
+		self.tobirama.enemy_respawn.respawn_enemy(self.tobirama)
   
 		#draw heart
 		if self.heart >= -1 :
@@ -324,19 +318,13 @@ class Level:
 		else :
 			self.behavior.draw_heart(0,self.player)
 		self.behavior.draw_mana(self.player)
-		#debug
-		# debug(self.obstacle_sprites)
 		#mana
 		self.behavior.attack_behavior(self.player)
 		#when attack
 		self.shuriken.shuriken_time_attack(self.player)
-  
-		# if self.minato.been_killed == True :
-		# 	self.minato.been_killed = False
-		# 	self.minato.enemy_hp = ENEMY_HP
-		# 	self.minato.hitbox.x = 2112
-		# 	self.minato.hitbox.y = 3648
-  
+		#debug
+		# debug(self.minato.status)
+
 class YSortCameraGroup(pygame.sprite.Group):
 	def __init__(self):
 		#font 
@@ -347,7 +335,6 @@ class YSortCameraGroup(pygame.sprite.Group):
 		super().__init__()
 		self.display_surface = pygame.display.get_surface()
 		#menu surface
-  
 		self.menu_surface = pygame.Surface((MENU_WIDTH, HEIGHT))
 		self.menu_surface.blit(MENU_BACKGROUND,(0,0))
 		self.draw_text("properties",self.menu_font,(255,255,255),80,20)
@@ -360,7 +347,6 @@ class YSortCameraGroup(pygame.sprite.Group):
 		self.draw_text("Time search ENEMY USING DFS",self.label_font,(255,255,255),50,390)
 		self.draw_text("Time search ENEMY USING IDS",self.label_font,(255,255,255),50,490)
 		self.draw_text("Time search ENEMY USING A*",self.label_font,(255,255,255),50,590)
-
 		#get size
 		self.half_width = (self.display_surface.get_size()[0] - MENU_WIDTH) // 2
 		self.half_height = self.display_surface.get_size()[1] // 2

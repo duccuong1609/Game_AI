@@ -9,7 +9,7 @@ from support import import_csv_layout
 from support import choose_enemy
 from debug import *
 from queue import PriorityQueue
-
+from behavior import Enemy_Respawn
 
 class Enemy(pygame.sprite.Sprite):
     #every tile have 64 pixel, count = 64 / enemy speed
@@ -46,12 +46,15 @@ class Enemy(pygame.sprite.Sprite):
 		self.been_catched = False
 		self.enemy_hp = ENEMY_HP
 		self.been_killed = False
+		self.comeback_search = False
+		self.is_respawn = False
+		self.enemy_respawn = Enemy_Respawn()
 
 	#import skin enemy
 	def import_Enemy_assets(self,num):
 		enemy_path = choose_enemy(num)
 		self.animations = {'up': [],'down': [],'left': [],'right': [],
-			'right_idle':[],'left_idle':[],'up_idle':[],'down_idle':[],}
+			'right_idle':[],'left_idle':[],'up_idle':[],'down_idle':[],'spawn':[]}
 
 		for animation in self.animations.keys():
 			full_path = enemy_path + animation
@@ -135,8 +138,9 @@ class Enemy(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect(center = self.hitbox.center)
 	#update animation
 	def update(self):
-		self.input()
-		self.get_status()
+		if self.status != 'spawn' :
+			self.input()
+			self.get_status()
 		self.animate()
 #shortest path for enenmy
 def find_shortest_path(self, start, end, algorithm):
@@ -146,7 +150,8 @@ def find_shortest_path(self, start, end, algorithm):
 			self.visited.clear()
 			self.point.clear()
 			self.point.append((0, 0))
-			self.catched = True
+			if self.status !='spawn' :
+				self.catched = True
 		match algorithm:
 			case 0:
 				bfs(self,start, end)

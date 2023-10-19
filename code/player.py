@@ -37,6 +37,12 @@ class Player(pygame.sprite.Sprite):
 		self.cant_attack = False
 		#finish attack
 		self.finish_attack = True
+		self.attack_sound = pygame.mixer.Sound('audio/rasen_shuriken.mp3')
+		self.naruto_attack_voice = pygame.mixer.Sound('audio/Naruto_voice_rasen_shuriken.mp3')
+		self.cannot_attack_sound = pygame.mixer.Sound('audio/Jutsu_Sound_Effect.mp3')
+		self.attack_sound.set_volume(EFFECT_VOLUME)
+		self.naruto_attack_voice.set_volume(EFFECT_VOLUME)
+		self.cannot_attack_sound.set_volume(EFFECT_VOLUME)
 
 	def import_player_assets(self):
 		character_path = 'graphics/player/'
@@ -80,13 +86,19 @@ class Player(pygame.sprite.Sprite):
 			if keys[pygame.K_ESCAPE] :
 				self.out_game = True
 			# attack input
-			if keys[pygame.K_f] and self.cant_attack == False and self.finish_attack == True:
-				self.finish_attack = False
+			if keys[pygame.K_f] and self.cant_attack == False and self.finish_attack == True and 'idle' not in self.status:
 				if self.attacking == False :
 					self.frame_index = 0
 				self.attacking = True
 				self.attack_time = pygame.time.get_ticks()
-				
+				self.naruto_attack_voice.stop()
+				self.attack_sound.stop()
+				self.naruto_attack_voice.play()
+				self.attack_sound.play()
+				self.finish_attack = False
+			if keys[pygame.K_f] and 'idle' in self.status :
+				self.cannot_attack_sound.stop()
+				self.cannot_attack_sound.play()
 			# magic input 
 			# if keys[pygame.K_LCTRL]:
 			# 	self.attacking = True

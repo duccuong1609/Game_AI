@@ -6,6 +6,7 @@ WIDTH    = 1520
 HEIGHT  = 760
 FPS      = 120
 TILESIZE = 64
+
 PLAYERSPEED = 8
 
 BFS = 0
@@ -30,14 +31,14 @@ WIN_BG = pygame.image.load("graphics/menu/bg.jpg")
 LOSE_BG = pygame.image.load("graphics/menu/lose_BG.jpg")
 GAME_ICON = pygame.image.load("graphics/menu/icon.png")
 
-BG_VOLUME = 0.1
+BG_VOLUME = 0.05
 EFFECT_VOLUME = 0.3
 DEBUFF_VOLUME = 0.5
 
 SPEED_UP = 1
 
 NORMAL_STATUS_SPEED = 0.15
-ATTACK_STATUS_SPEED = 0.45
+ATTACK_STATUS_SPEED = 0.4
 
 # MUTE
 # BG_VOLUME = 0
@@ -56,4 +57,6 @@ MANA_RESTORE_TIME = 300
 
 SHURIKEN_SPEED = 2
 
-ENEMY_HP = 3
+ENEMY_HP = 1
+
+TIME_TILL_ENEMY_RESPAWN = 10000

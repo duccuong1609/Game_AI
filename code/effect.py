@@ -24,7 +24,7 @@ class Shuriken(pygame.sprite.Sprite):
         self.attack_time = None
         self.attack_done = False
         self.is_visible = False
-        self.visible_cooldown = 800
+        self.visible_cooldown = 1000
         self.maze = import_csv_layout('map/map_FloorBlocks.csv')
         self.speed = 8
         self.limit_tile = 0
@@ -116,18 +116,13 @@ class Shuriken(pygame.sprite.Sprite):
             self.hitbox.x = self.x_start
             self.hitbox.y = self.y_start - 0.4*(player.hitbox.height)
             
-            # print("start :"+str(self.x_start) +"."+ str(self.y_start))
-            # print("end :"+str(self.x_limit) +"."+ str(self.y_limit))
-            
         if self.attack_direction == "down" :
             self.hitbox.x = self.x_start
             self.hitbox.y = self.y_start + 0.4*(player.hitbox.height)
+            
         if self.attack_direction == "left" :
             self.hitbox.x = self.x_start - 0.4*(player.hitbox.width)
             self.hitbox.y = self.y_start - 0.5*(player.hitbox.height)
-            
-            # print("start :"+str(self.x_start) +"."+ str(self.y_start))
-            # print("end :"+str(self.x_limit) +"."+ str(self.y_limit))
             
         if self.attack_direction == "right" :
             self.hitbox.x = self.x_start + 0.4*(player.hitbox.width)
@@ -150,8 +145,7 @@ class Shuriken(pygame.sprite.Sprite):
                 bounce += 1
                 self.y_limit = y_point*64
                 self.x_limit = x_point*64
-                # print("maze["+ str(y_point-i)+"," + str(x_point)+"] = " + self.maze[y_point-i][x_point])
-                # print('point = '+ str(bounce))
+                
             return bounce
         if player.status == "down_attack" :
             self.attack_direction = "down"
@@ -258,8 +252,8 @@ class Blow_Shuriken(pygame.sprite.Sprite):
         self.attack_cooldown = 1
         self.attack_time = None
         self.is_visible = False
-        self.visible_cooldown = 600
-        self.absorb_cooldown = 400
+        self.visible_cooldown = 1400
+        self.absorb_cooldown = 1200
         self.maze = import_csv_layout('map/map_FloorBlocks.csv')
         self.x_disable_shuriken = 0
         self.y_disable_shuriken = 0
