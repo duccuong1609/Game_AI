@@ -15,6 +15,8 @@ DLS = 2
 IDS = 2
 ASTAR = 3
 
+
+#skin
 MINATO = 0
 SASUKE = 1
 NARUTO = 2
@@ -24,6 +26,11 @@ SASUKE_2ND = 5
 TSUNADE = 6
 TOBIRAMA = 7
 PAIN_DEVA = 8
+PAIN_PRETA = 9
+PAIN_NARAKA = 10
+PAIN_HUMAN = 11
+PAIN_ASURA = 12
+PAIN_ANIMAL = 13
 
 MENU_BACKGROUND = pygame.image.load("graphics/menu/menu_background.png")
 VICTORY = pygame.image.load("graphics/menu/victory.png")
@@ -57,6 +64,6 @@ MANA_RESTORE_TIME = 300
 
 SHURIKEN_SPEED = 2
 
-ENEMY_HP = 1
+ENEMY_HP = 3
 
-TIME_TILL_ENEMY_RESPAWN = 10000
+TIME_TILL_ENEMY_RESPAWN = 20000

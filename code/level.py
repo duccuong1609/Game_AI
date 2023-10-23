@@ -39,13 +39,13 @@ class Level:
 		self.sound_point = pygame.mixer.Sound('audio/loot_coin.mp3')
 		self.food = pygame.mixer.Sound('audio/food.mp3')
 		self.boom = pygame.mixer.Sound('audio/boom.mp3')
-		self.die = pygame.mixer.Sound('audio/die.wav')
+		self.dattebayo = pygame.mixer.Sound('audio/dattebayo.mp3')
 		self.win = pygame.mixer.Sound('audio/you_win.mp3')
 		self.heal_pickup = pygame.mixer.Sound('audio/heal_pickup.mp3')
 		self.sound_point.set_volume(EFFECT_VOLUME)
 		self.food.set_volume(EFFECT_VOLUME)
 		self.boom.set_volume(DEBUFF_VOLUME)
-		self.die.set_volume(EFFECT_VOLUME)
+		self.dattebayo.set_volume(EFFECT_VOLUME)
 		self.lose_sound.set_volume(BG_VOLUME)
 		self.win_sound.set_volume(BG_VOLUME)
 		self.win.set_volume(EFFECT_VOLUME)
@@ -92,10 +92,10 @@ class Level:
 							Tile((x,y),[self.visible_sprites],'object',surf)
 		#spawn player // bot
 		self.player = Player((2112, 3648),[self.visible_sprites],self.obstacle_sprites)
-		self.tsunade = Enemy((768, 1920),[self.visible_sprites],self.obstacle_sprites,TSUNADE)
-		self.minato = Enemy((2688, 2560),[self.visible_sprites],self.obstacle_sprites,PAIN_DEVA)
-		self.kakashi = Enemy((2048, 2112),[self.visible_sprites],self.obstacle_sprites,KAKASHI)
-		self.tobirama = Enemy((256, 2496),[self.visible_sprites],self.obstacle_sprites,TOBIRAMA)
+		self.tsunade = Enemy((768, 1920),[self.visible_sprites],self.obstacle_sprites,PAIN_PRETA)
+		self.minato = Enemy((2688, 2560),[self.visible_sprites],self.obstacle_sprites,PAIN_ANIMAL)
+		self.kakashi = Enemy((2048, 2112),[self.visible_sprites],self.obstacle_sprites,PAIN_ASURA)
+		self.tobirama = Enemy((256, 2496),[self.visible_sprites],self.obstacle_sprites,PAIN_HUMAN)
 		#spawn infinity
 		self.shuriken = Shuriken((9999, 9999),[self.visible_sprites],self.obstacle_sprites)
 
@@ -139,10 +139,10 @@ class Level:
 			self.on_cooldown(enemy)
 			if(self.heart >=-1):
 				if(self.cooldown == False) and self.heart < MAX_HEART - 2:
-					self.die.play()
+					self.dattebayo.play()
 					self.heart -=1
 				if(self.heart == MAX_HEART -2) :
-					self.die.play()
+					self.dattebayo.play()
 					self.heart -=1
 			
 	def on_cooldown(self,enemy) :

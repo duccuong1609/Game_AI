@@ -35,5 +35,10 @@ def choose_enemy(num) :
 		6: 'graphics/enemy/tsunade/',
 		7: 'graphics/enemy/tobirama/',
 		8: 'graphics/enemy/Akatsuki/Pain_Deva/',
+		9: 'graphics/enemy/Akatsuki/Pain_Preta/',
+		10: 'graphics/enemy/Akatsuki/Pain_Naraka/',
+		11: 'graphics/enemy/Akatsuki/Pain_Human/',
+		12: 'graphics/enemy/Akatsuki/Pain_Asura/',
+		13: 'graphics/enemy/Akatsuki/Pain_Animal/',
 	}
     return switcher.get(num,0)
