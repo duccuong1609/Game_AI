@@ -221,17 +221,25 @@ class Level:
 			for col_index, col in enumerate(row):
 				x = col_index * TILESIZE
 				y = row_index * TILESIZE
-				if((x-64) <= self.player.hitbox.x <= (x+64) and (y-64) <= self.player.hitbox.y <= (y+64)) :
+				if((x-16) <= self.player.hitbox.x <= (x+16) and (y-64) <= self.player.hitbox.y <= (y+64)) :
 					if self.layouts[row_index][col_index] != '-1':
 						if(self.layouts[row_index][col_index]) == '0' :
 							# increase point for character
 							self.sound_point.play()
 							self.point += 1000
 						if(self.layouts[row_index][col_index]) == '1' :
-							if(self.player.speed)>= PLAYERSPEED//2:
-								self.boom.play()
-								self.player.speed -= 1
-								self.count_time_speed_restore = 0
+							# if(self.player.speed)>= PLAYERSPEED//2:
+							# 	self.boom.play()
+							# 	self.player.speed -= 1
+							# 	self.count_time_speed_restore = 0
+							self.boom.play()
+							if(self.player.player_mode != "IMMORTAL MODE") :
+								self.heart -=1
+								if(self.heart < -2) :
+									self.ending("lose")
+									self.player.lose = True
+									self.tsunade.catched = True
+
 						if(self.layouts[row_index][col_index]) == '2' :
 							if(self.player.speed) <= PLAYERSPEED*2:
 								self.food.play()

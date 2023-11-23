@@ -15,7 +15,6 @@ DLS = 2
 IDS = 2
 ASTAR = 3
 
-
 #skin
 MINATO = 0
 SASUKE = 1

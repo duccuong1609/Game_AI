@@ -76,6 +76,11 @@ class Player(pygame.sprite.Sprite):
 				self.status = 'left'
 			else:
 				self.direction.x = 0
+			
+			if keys[pygame.K_z] :
+				self.speed = 20
+			else :
+				self.speed = PLAYERSPEED
 
 			if keys[pygame.K_p] :
 				self.player_mode = "PLAYING MODE"
